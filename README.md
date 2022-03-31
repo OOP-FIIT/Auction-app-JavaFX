@@ -1,14 +1,41 @@
-# Mykhailo Sichkaruk
-# Online advertisement auction
-A VCG auction is used to sell advertising spaces on Internet sites. Facebook and Google (in their partner network use this auction model. This is blind auction, so nobody sees another’s bid. Also, it is second-price type of auction. All the possible combinations of bids are then considered by the auction system, and the one maximizing the total sum of bids is kept, but winners pay second price. There are few spaces for advertisement to sell And everybody could do a few bids, for example you may bet 10$ for 1 slot, 15$ for 2 slots and 100 for all 20 slots of advertisement. Key point of the project:
+# Replace and write your Name and Lastname
 
-- Login with GUI
-- User passwords and info is stored in database
-- 2 Types of users – bidder/admin
-- Places for advertisement are auctioned (10-50 places)
-- Bidders make their bids with interface
-- Model calculates the winners Classes: View – draw all - interface Controller – Provide users action to system Model – - Auction - all algorithms and calculations Database – all information is stored here
+## Replace and write Project name
 
-# Documentation AAAAA SCREAMING 
+## Table of Contents
 
-[Versions](/doc/002_versions.md)
+* [Project documentation](Documentation/000_project_documentation)
+  * [JavaDoc documentation](Documentation/000_project_documentation)
+* [UML diagrams](Documentation/001_uml_diagrams)
+* [Versions](Documentation/002_versions)
+* [Technical details](Documentation/003_tech_details)
+* [Simulation and demonstration](Documentation/004_simulation_and_demonstration)  
+  * [Video demonstration](Documentation/004_simulation_and_demonstration)
+
+## Fulfillment of criteria
+
+Note: In this section, write which criteria you have met from the professor's website
+
+## Certain implementations
+
+Note: Write here where you have used inheritance, polymorphism and aggregation, or anything else you want to brag about. Also, add in which version you made a certain implementation and within which file and line it is located.
+
+### Main criteria
+
+Note: Write here your list with the name of the class and the line of code.
+
+Example:
+
+* polymorphism and aggregation
+  * Login.java # 58
+  * Registration.java # 127
+* inheritance
+  * CheckAccountType.java # 5
+
+### Secondary criteria
+
+Example:
+
+* Observer
+  * RunningStorage.java # 10
+* RTTI
