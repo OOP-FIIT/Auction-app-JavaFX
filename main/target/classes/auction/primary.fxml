@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<GridPane fx:id="mainScene" alignment="CENTER" cache="true" cacheHint="SPEED" focusTraversable="true" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" snapToPixel="false" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.PrimaryController">
+  <columnConstraints>
+      <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="ALWAYS" minWidth="-Infinity" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="100.40001831054687" valignment="CENTER" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="96.76092529296875" minHeight="0.0" prefHeight="21.360931396484375" valignment="CENTER" vgrow="ALWAYS" />
+    <RowConstraints maxHeight="1.7976931348623157E308" minHeight="2.2000762939452727" prefHeight="39.80005187988277" valignment="CENTER" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="50.0" minHeight="0.0" prefHeight="20.199981689453125" valignment="TOP" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="30.80002136230462" valignment="CENTER" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="18.39999694824212" valignment="CENTER" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="46.60003662109375" valignment="CENTER" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="56.80000610351567" prefHeight="99.19998779296873" valignment="CENTER" vgrow="ALWAYS" />
+  </rowConstraints>
+   <children>
+      <Text fx:id="login_text_mainScene" fill="WHITE" layoutX="200.0" layoutY="100.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="0.0" text="Enter existing login or new for registration" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS">
+         <font>
+            <Font size="14.0" />
+         </font></Text>
+      <TextField fx:id="login_input_mainScene" alignment="CENTER" maxWidth="-Infinity" minHeight="-Infinity" minWidth="200.0" nodeOrientation="LEFT_TO_RIGHT" onKeyPressed="#handle_login_input" prefHeight="35.0" prefWidth="370.0" style="-fx-background-color: grey;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+         <font>
+            <Font size="18.0" />
+         </font></TextField>
+      <Text fx:id="password_text_mainScene" boundsType="LOGICAL_VERTICAL_CENTER" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Password" textAlignment="CENTER" textOrigin="CENTER" visible="false" wrappingWidth="353.9511413574219" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+         <font>
+            <Font size="14.0" />
+         </font></Text>
+      <TextField fx:id="password_input_mainScene" alignment="CENTER" cacheShape="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handle_password_input" prefHeight="25.0" prefWidth="370.0" style="-fx-background-color: grey;" visible="false" GridPane.rowIndex="4">
+         <font>
+            <Font size="18.0" />
+         </font></TextField>
+      <Text fx:id="email_text_mainScene" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Email, please" textAlignment="CENTER" visible="false" wrappingWidth="309.33673095703125" GridPane.rowIndex="5" GridPane.valignment="BOTTOM">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <TextField fx:id="email_input_mainScene" alignment="CENTER" cacheShape="false" focusTraversable="false" onKeyPressed="#handle_email_input" prefHeight="25.0" prefWidth="498.0" style="-fx-background-color: grey;" visible="false" GridPane.rowIndex="6" GridPane.valignment="TOP" />
+      <GridPane fx:id="user_modes_grid" cacheShape="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" visible="false" GridPane.rowIndex="7">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</GridPane>
