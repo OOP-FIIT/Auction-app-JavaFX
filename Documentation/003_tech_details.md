@@ -6,17 +6,16 @@ Example:
 
 (Change this Example:)
 
-* JDK 16
-* JavaFX 16
+* JDK 17
+* JavaFX 13
 * Scene Builder
 * MySQL Connector/J 8.0.23
 
 ## Installation
 
-Example:
-
-* Make sure MySQL is installed properly and running at port 3306 with username 'root' and password 'root'
+Make sure MySQL is installed properly and running at port 3306 with username 'root' and password 'misha'
 
 ## Database
 
-Write here and present the specifics of your database, if you use it or another form of data storage.
+SQL_manager.java creates DB and tables by itsown
+No problems expected

@@ -1,6 +1,6 @@
-# Replace and write your Name and Lastname
+# Mykhailo Sichkaruk
 
-## Replace and write Project name
+## Auction for online advertisement
 
 ## Table of Contents
 
@@ -14,7 +14,10 @@
 
 ## Fulfillment of criteria
 
-Note: In this section, write which criteria you have met from the professor's website
+Polymorphism +
+Aggregation +
+Gui +
+Verification wia mail +
 
 ## Certain implementations
 
@@ -27,15 +30,12 @@ Note: Write here your list with the name of the class and the line of code.
 Example:
 
 * polymorphism and aggregation
-  * Login.java # 58
-  * Registration.java # 127
+  * Auctioner.java # 5
+  * Goods.java # 8
 * inheritance
-  * CheckAccountType.java # 5
+  * Buyer.java # 2
 
 ### Secondary criteria
 
 Example:
 
-* Observer
-  * RunningStorage.java # 10
-* RTTI
