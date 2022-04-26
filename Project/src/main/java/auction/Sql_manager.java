@@ -10,7 +10,9 @@ public class Sql_manager {
    private static final String USER = "root";
    private static final String PASS = "misha";
    private static final String DB_NAME = "USERS";
-   private static final String TABLE_NAME = "USERDATA";
+   private static final String BIDS_TABLENAME = "Biiid"; //Bids  (now used test names like AAAA)
+   private static final String TABLE_NAME = "USERDATA"; //Lots
+   private static final String LOTS_TABLENAME = "lll";
    private static final String DB_URL = "jdbc:mysql://localhost/";
    private static Connection conn;
 
@@ -21,6 +23,8 @@ public class Sql_manager {
       create_db();
       select_db();
       create_tables();
+      CreateTable_Lots();
+      insert_new_lot_sql("LOT1", "2008-10-29 14:56:59", "description");
 
    }
 
@@ -38,11 +42,13 @@ public class Sql_manager {
 
    public static void create_tables() throws SQLException {
       String create = "CREATE TABLE " + " IF NOT EXISTS " + TABLE_NAME +
-            "( login VARCHAR(50), " +
+            "(id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +  
+            "login VARCHAR(50), " +
             " password VARCHAR(50), " +
             " email VARCHAR(50), " +
             " modd VARCHAR(10), " +
-            " balance INTEGER)";
+            " balance INTEGER," +
+            " PRIMARY KEY (id))";
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(create);
    }
@@ -74,6 +80,41 @@ public class Sql_manager {
          return true;
       } else
          return false;
+   }
+
+   public static void CreateTable_Lots() throws SQLException {
+      String create = "CREATE TABLE " + " IF NOT EXISTS " + LOTS_TABLENAME +
+            " (id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
+            " name VARCHAR(50), " +
+            " date DATETIME," +
+            " seller INTEGER ," +
+            " description VARCHAR(10000)," +
+            " PRIMARY KEY (id))";
+      Statement stmt = conn.createStatement();
+      stmt.executeUpdate(create);
+   }
+   //'2008-11-11'
+   public static void insert_new_lot_sql(String name, String date, String description) throws SQLException {
+      Statement stmt = conn.createStatement();
+      String sql = "INSERT INTO " + LOTS_TABLENAME + " (name, date, description) VALUES('" + name + "' , '" + date + "' , '" + description + "');";
+      stmt.executeUpdate(sql);
+   }
+
+   public static void CreateTable_Bids() throws SQLException {
+      String create = "CREATE TABLE " + " IF NOT EXISTS " + BIDS_TABLENAME +
+            " (id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
+            " name VARCHAR(50), " +
+            " lot INTEGER," +
+            " buyer DATETIME," +
+            " description VARCHAR(10000))";
+      Statement stmt = conn.createStatement();
+      stmt.executeUpdate(create);
+   }
+
+   public static void insert_new_bids_sql(String name, String date, String description) throws SQLException {
+      Statement stmt = conn.createStatement();
+      String sql = "INSERT INTO " + LOTS_TABLENAME + " (name, date, description) VALUES('" + name + "' , '" + date + "' , '" + description + "');";
+      stmt.executeUpdate(sql);
    }
 
 }
