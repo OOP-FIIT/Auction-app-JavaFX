@@ -40,7 +40,13 @@ public class Sql_manager {
       stmt.executeUpdate(create);
    }
 
-   public static void create_tables() throws SQLException {
+   private static void CreateTables(){
+      CreateTable_Users();
+      CreateTable_Lots();
+      CreateTable_Users();
+   }
+
+   public static void CreateTable_Users() throws SQLException {
       String create = "CREATE TABLE " + " IF NOT EXISTS " + TABLE_NAME +
             "(id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +  
             "login VARCHAR(50), " +
@@ -85,15 +91,15 @@ public class Sql_manager {
    public static void CreateTable_Lots() throws SQLException {
       String create = "CREATE TABLE " + " IF NOT EXISTS " + LOTS_TABLENAME +
             " (id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
-            " name VARCHAR(50), " +
-            " date DATETIME," +
-            " seller INTEGER ," +
-            " description VARCHAR(10000)," +
+            " seller INTEGER ," +            //Who
+            " name VARCHAR(50), " +          //What
+            " date DATETIME," +              //When
+            " description VARCHAR(10000)," + //Description
             " PRIMARY KEY (id))";
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(create);
    }
-   //'2008-11-11'
+
    public static void insert_new_lot_sql(String name, String date, String description) throws SQLException {
       Statement stmt = conn.createStatement();
       String sql = "INSERT INTO " + LOTS_TABLENAME + " (name, date, description) VALUES('" + name + "' , '" + date + "' , '" + description + "');";
@@ -103,17 +109,16 @@ public class Sql_manager {
    public static void CreateTable_Bids() throws SQLException {
       String create = "CREATE TABLE " + " IF NOT EXISTS " + BIDS_TABLENAME +
             " (id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
-            " name VARCHAR(50), " +
-            " lot INTEGER," +
-            " buyer DATETIME," +
-            " description VARCHAR(10000))";
+            " buyer_id INTEGER," +  //Who
+            " date DATETIME," +     //When
+            " lot_id INTEGER);" ;   //Where
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(create);
    }
 
-   public static void insert_new_bids_sql(String name, String date, String description) throws SQLException {
+   public static void insert_new_bids_sql(String Buyer, String Date, String Lot) throws SQLException {
       Statement stmt = conn.createStatement();
-      String sql = "INSERT INTO " + LOTS_TABLENAME + " (name, date, description) VALUES('" + name + "' , '" + date + "' , '" + description + "');";
+      String sql = "INSERT INTO " + BIDS_TABLENAME + " (buyer, date, lot_id) VALUES('" + Buyer + "' , '" + Date + "' , '" + Lot + "');";
       stmt.executeUpdate(sql);
    }
 
