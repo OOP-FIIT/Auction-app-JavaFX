@@ -10,7 +10,7 @@ import java.net.*;
 import java.sql.SQLException;
 import java.io.*;
 
-import auction.Sql_manager;
+import auction.SQL;
 
 import java.io.IOException;
 
@@ -41,7 +41,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws SQLException {
-        Sql_manager.init_SQL();
+        SQL.InitSql();
         launch();
     }
 

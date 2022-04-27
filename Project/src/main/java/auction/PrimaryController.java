@@ -48,7 +48,7 @@ public class PrimaryController {
     }
 
     private void handle_login(String login) throws IOException, SQLException {
-        if (Sql_manager.login_exists(login)) {
+        if (SQL.IsLoginExists(login)) {
             sing_in_password = true;
             sing_in(login);
         } else {
@@ -59,7 +59,7 @@ public class PrimaryController {
 
     private void handle_password(String login, String password) throws SQLException, IOException {
         if (sing_in_password == true) {
-            if (Sql_manager.password_correct(login, password))
+            if (SQL.IsPaaswordCorrect(login, password))
                 switchToMenu();
             else {
                 password_input_mainScene.setText("");
@@ -211,17 +211,17 @@ public class PrimaryController {
     }
 
     public void handle_buyer_button() throws SQLException, IOException {
-        Sql_manager.insert_new_user_sql(login_final, password_final, email_final, "b", balance_final);
+        SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
         switchToMenu();
     }
 
     public void handle_seller_button() throws SQLException, IOException {
-        Sql_manager.insert_new_user_sql(login_final, password_final, email_final, "s", balance_final);
+        SQL.InsertUser(login_final, password_final, email_final, "s", balance_final);
         switchToMenu();
     }
 
     public void handle_auctioner_button() throws SQLException, IOException {
-        Sql_manager.insert_new_user_sql(login_final, password_final, email_final, "a", balance_final);
+        SQL.InsertUser(login_final, password_final, email_final, "a", balance_final);
         switchToMenu();
     }
 }
