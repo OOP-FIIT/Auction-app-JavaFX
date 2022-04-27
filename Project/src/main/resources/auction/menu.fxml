@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.Buyer">
+<GridPane fx:id="Menu_grid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.Buyer">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="518.0" minWidth="10.0" prefWidth="518.0" />
+    <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="10.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.5999755859375" minWidth="10.0" prefWidth="82.0" />
   </columnConstraints>
   <rowConstraints>
@@ -21,34 +21,13 @@
     <RowConstraints maxHeight="97.0" minHeight="4.600012207031284" prefHeight="62.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ScrollPane fx:id="scroll_lots" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+      <ScrollPane fx:id="scroll_lots" fitToWidth="true" hvalue="1.0" maxHeight="1.7976931348623157E308" maxWidth="550.0" vbarPolicy="ALWAYS" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
          <content>
-            <VBox fx:id="Vbox_lots" prefHeight="346.0" prefWidth="519.0">
-               <children>
-                  <GridPane prefHeight="68.0" prefWidth="519.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="313.0" minWidth="10.0" prefWidth="95.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="436.0" minWidth="10.0" prefWidth="424.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="24.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="28.0" minHeight="10.0" prefHeight="17.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="EndDate" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seller" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Maybe Photo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                     </children>
-                  </GridPane>
-               </children>
-            </VBox>
+            <VBox fx:id="Vbox_lots" alignment="CENTER" maxWidth="600.0" prefWidth="500.0" style="-fx-background-color: blue;" />
          </content>
       </ScrollPane>
       <Button fx:id="add_good" mnemonicParsing="false" onAction="#AddGood" prefHeight="56.0" prefWidth="70.0" text="Add good" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-      <TextField fx:id="add_lot_input" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#AddLot_handle" prefHeight="31.0" prefWidth="463.0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS">
+      <TextField fx:id="add_lot_input" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#AddLot_handle" prefHeight="31.0" prefWidth="463.0" style="-fx-background-color: darkgrey;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS">
          <GridPane.margin>
             <Insets bottom="5.0" />
          </GridPane.margin>

@@ -9,18 +9,24 @@ import java.util.Date;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.util.converter.DateTimeStringConverter;
 
@@ -34,7 +40,7 @@ public class Buyer extends User {
     @FXML
     private Text add_lot_text;
     @FXML
-    private GridPane Lot_grid;
+    private GridPane Menu_grid;
 
     private int addLotStatus = 1;
     private String LOT_NAME = "";
@@ -42,7 +48,6 @@ public class Buyer extends User {
 
     // Polymorphism
     public void AddGood() throws SQLException {
-        SQL.InsertLot("name", "1000-10-10 10:10:10", "description");
         PrintLots();
     }
 
@@ -56,7 +61,7 @@ public class Buyer extends User {
 
         ResultSet result = SQL.SELECT_Lots();
 
-        GridPane template = Lot_grid;
+        //scroll_lots.setMaxWidth(scroll_lots.getMaxWidth());
 
         while (result.next()) {
             String id = result.getString("id");
@@ -64,8 +69,12 @@ public class Buyer extends User {
             String date = result.getString("date");
             String description = result.getString("description");
 
-            //Text lot = new Text("ID: " + id + "\t Name: " + name + "\t Date: " + date);
-            Vbox_lots.getChildren().add(CteateLotGrid(name, date, description, "seller"));
+
+
+            GridPane lot = CteateLotGrid(name, date, description, "seller");
+            // Text lot = new Text("ID: " + id + "\t Name: " + name + "\t Date: " + date);
+
+            Vbox_lots.getChildren().add(lot);
         }
 
     }
@@ -117,15 +126,37 @@ public class Buyer extends User {
         Text Lot_description = new Text(description);
         Text Lot_seller = new Text(seller);
 
+        Lot_name.setFill(Paint.valueOf("green"));
+        Lot_date.setStyle("-fx-text-fill: green;  ");
+        Lot_description.setStyle("-fx-text-fill: green;  ");
+        Lot_seller.setStyle("-fx-text-fill: green;  ");
+
         GridPane Lot_template = new GridPane();
+        Lot_template.setStyle("-fx-background-color: grey;");
+        Lot_template.setGridLinesVisible(true);
 
-        Lot_template.add(Lot_name, 0, 0, 1, 1);
-        Lot_template.add(Lot_date, 0, 2, 1, 1);
-        Lot_template.add(Lot_description, 1, 0, 1, 1);
-        Lot_template.add(Lot_seller, 0, 1, 1, 1);
-        
-        Lot_template.setBorder(new Border(new BorderStroke(Color.GREY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+        Lot_template.add(Lot_name, 0, 0);
+        Lot_template.add(Lot_date, 0, 2);
+        Lot_template.add(Lot_description, 1, 0);
+        Lot_template.add(Lot_seller, 0, 1);
+    
+        RowConstraints row1 = new RowConstraints();
+        row1.setPercentHeight(15);
+        RowConstraints row2 = new RowConstraints();
+        row2.setPercentHeight(75);
+        RowConstraints row3 = new RowConstraints();
+        row3.setPercentHeight(10);
+        Lot_template.getRowConstraints().addAll(row1, row2, row3);
 
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(40);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPercentWidth(60);
+        Lot_template.getColumnConstraints().addAll(col1, col2);
+
+
+        Lot_template.setBorder(new Border(
+                new BorderStroke(Color.ALICEBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
         return Lot_template;
     }
 
