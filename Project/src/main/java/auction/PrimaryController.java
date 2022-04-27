@@ -27,7 +27,7 @@ public class PrimaryController {
     private String password_final;
     private String login_final;
     private String email_final;
-    private int balance_final;
+    private int balance_final = 100;
     @FXML
     private TextField login_input_mainScene;
     @FXML

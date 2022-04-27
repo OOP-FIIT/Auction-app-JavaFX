@@ -16,6 +16,8 @@ public class SQL {
    private static final String DB_URL = "jdbc:mysql://localhost/";
    private static Connection conn;
 
+   // INIT--------------------------------------
+
    public static void InitSql() throws SQLException {
       // Open a connection
       conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -35,12 +37,6 @@ public class SQL {
       String create = "USE " + DB_NAME; 
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(create);
-   }
-
-   private static void CreateTables() throws SQLException{
-      CreateTable_Users();
-      CreateTable_Lots();
-      CreateTable_Bids();
    }
 
    public static boolean IsLoginExists(String login) throws SQLException {
@@ -65,7 +61,15 @@ public class SQL {
          return false;
    }
 
-   public static void CreateTable_Lots() throws SQLException {
+   //CREATE-------------------------------------
+
+   private static void CreateTables() throws SQLException{
+      CreateTable_Users();
+      CreateTable_Lots();
+      CreateTable_Bids();
+   }
+
+   private static void CreateTable_Lots() throws SQLException {
       String create = "CREATE TABLE " + " IF NOT EXISTS " + LOTS_TABLENAME +
             " (id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
             " seller INTEGER ," +            //Who
@@ -77,7 +81,7 @@ public class SQL {
       stmt.executeUpdate(create);
    }
 
-   public static void CreateTable_Users() throws SQLException {
+   private static void CreateTable_Users() throws SQLException {
       String create = "CREATE TABLE " + " IF NOT EXISTS " + USERS_TABLENAME +
             "(id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +  
             "login VARCHAR(50), " +
@@ -90,7 +94,7 @@ public class SQL {
       stmt.executeUpdate(create);
    }
 
-   public static void CreateTable_Bids() throws SQLException {
+   private static void CreateTable_Bids() throws SQLException {
       String create = "CREATE TABLE " + " IF NOT EXISTS " + BIDS_TABLENAME +
             " (id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
             " buyer_id INTEGER," +  //Who
@@ -100,6 +104,8 @@ public class SQL {
       stmt.executeUpdate(create);
    }
 
+   //INSERT------------------------------------
+
    public static void InsertUser(String login, String password, String email, String mode, int balance) throws SQLException {
       Statement stmt = conn.createStatement();
       String sql = "INSERT INTO " + USERS_TABLENAME + " (login,password,email,modd,balance) VALUES('" + login + "' , '" + password + "' , '" + email + "', '" + mode + "', " + balance  + ");";
@@ -107,7 +113,14 @@ public class SQL {
 
    }
 
-   public static void InsertLot(String name, String date, String description) throws SQLException {
+   /**
+    * Inserts new Lot in DataBase-Lots_table
+    * @param name String
+    * @param date "1000-01-01 00:00:00"
+    * @param description
+    * @throws SQLException
+    */
+   public static void InsertLot(String name, String description, String date) throws SQLException {
       Statement stmt = conn.createStatement();
       String sql = "INSERT INTO " + LOTS_TABLENAME + " (name, date, description) VALUES('" + name + "' , '" + date + "' , '" + description + "');";
       stmt.executeUpdate(sql);
@@ -117,6 +130,14 @@ public class SQL {
       Statement stmt = conn.createStatement();
       String sql = "INSERT INTO " + BIDS_TABLENAME + " (buyer, date, lot_id) VALUES('" + Buyer + "' , '" + Date + "' , '" + Lot + "');";
       stmt.executeUpdate(sql);
+   }
+
+   //SELECT------------------------------------
+
+   public static ResultSet SELECT_Lots() throws SQLException{
+      Statement stmt = conn.createStatement();
+      String sql = "SELECT * from " + LOTS_TABLENAME;
+      return stmt.executeQuery(sql);
    }
 
 }
