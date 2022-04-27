@@ -12,8 +12,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.converter.DateTimeStringConverter;
 
@@ -26,6 +33,8 @@ public class Buyer extends User {
     private TextField add_lot_input;
     @FXML
     private Text add_lot_text;
+    @FXML
+    private GridPane Lot_grid;
 
     private int addLotStatus = 1;
     private String LOT_NAME = "";
@@ -47,13 +56,16 @@ public class Buyer extends User {
 
         ResultSet result = SQL.SELECT_Lots();
 
+        GridPane template = Lot_grid;
+
         while (result.next()) {
             String id = result.getString("id");
             String name = result.getString("name");
             String date = result.getString("date");
+            String description = result.getString("description");
 
-            Text lot = new Text("ID: " + id + "\t Name: " + name + "\t Date: " + date);
-            Vbox_lots.getChildren().add(lot);
+            //Text lot = new Text("ID: " + id + "\t Name: " + name + "\t Date: " + date);
+            Vbox_lots.getChildren().add(CteateLotGrid(name, date, description, "seller"));
         }
 
     }
@@ -64,7 +76,7 @@ public class Buyer extends User {
         add_lot_text.setText("Add some beautiful description");
 
         addLotStatus++;
-        
+
         Platform.runLater(() -> add_lot_input.requestFocus());
     }
 
@@ -91,12 +103,30 @@ public class Buyer extends User {
         add_lot_text.setText("Name your lot:");
         addLotStatus = 1;
 
-        SimpleDateFormat DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-        Date datenow = new Date();  
+        SimpleDateFormat DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date datenow = new Date();
         String date = DATETIME.format(datenow);
         System.out.println(date);
         SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date);
         PrintLots();
+    }
+
+    private GridPane CteateLotGrid(String name, String date, String description, String seller) {
+        Text Lot_name = new Text(name);
+        Text Lot_date = new Text(date);
+        Text Lot_description = new Text(description);
+        Text Lot_seller = new Text(seller);
+
+        GridPane Lot_template = new GridPane();
+
+        Lot_template.add(Lot_name, 0, 0, 1, 1);
+        Lot_template.add(Lot_date, 0, 2, 1, 1);
+        Lot_template.add(Lot_description, 1, 0, 1, 1);
+        Lot_template.add(Lot_seller, 0, 1, 1, 1);
+        
+        Lot_template.setBorder(new Border(new BorderStroke(Color.GREY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+
+        return Lot_template;
     }
 
 }

@@ -23,7 +23,28 @@
    <children>
       <ScrollPane fx:id="scroll_lots" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
          <content>
-            <VBox fx:id="Vbox_lots" prefHeight="346.0" prefWidth="519.0" />
+            <VBox fx:id="Vbox_lots" prefHeight="346.0" prefWidth="519.0">
+               <children>
+                  <GridPane prefHeight="68.0" prefWidth="519.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="313.0" minWidth="10.0" prefWidth="95.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="436.0" minWidth="10.0" prefWidth="424.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="24.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="28.0" minHeight="10.0" prefHeight="17.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="EndDate" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seller" GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Maybe Photo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
          </content>
       </ScrollPane>
       <Button fx:id="add_good" mnemonicParsing="false" onAction="#AddGood" prefHeight="56.0" prefWidth="70.0" text="Add good" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
