@@ -61,15 +61,13 @@ public class Buyer extends User {
 
         ResultSet result = SQL.SELECT_Lots();
 
-        //scroll_lots.setMaxWidth(scroll_lots.getMaxWidth());
+        Vbox_lots.setMaxHeight(50);
 
         while (result.next()) {
             String id = result.getString("id");
             String name = result.getString("name");
             String date = result.getString("date");
             String description = result.getString("description");
-
-
 
             GridPane lot = CteateLotGrid(name, date, description, "seller");
             // Text lot = new Text("ID: " + id + "\t Name: " + name + "\t Date: " + date);
@@ -121,12 +119,16 @@ public class Buyer extends User {
     }
 
     private GridPane CteateLotGrid(String name, String date, String description, String seller) {
-        Text Lot_name = new Text(name);
-        Text Lot_date = new Text(date);
-        Text Lot_description = new Text(description);
-        Text Lot_seller = new Text(seller);
+        Label Lot_name = new Label(name);
+        Label Lot_date = new Label(date);
+        Label Lot_description = new Label(description);
+        Label Lot_seller = new Label(seller);
 
-        Lot_name.setFill(Paint.valueOf("green"));
+        Lot_name.setWrapText(true);
+        Lot_date.setWrapText(true);
+        Lot_description.setWrapText(true);
+        Lot_seller.setWrapText(true);
+
         Lot_date.setStyle("-fx-text-fill: green;  ");
         Lot_description.setStyle("-fx-text-fill: green;  ");
         Lot_seller.setStyle("-fx-text-fill: green;  ");
@@ -139,7 +141,7 @@ public class Buyer extends User {
         Lot_template.add(Lot_date, 0, 2);
         Lot_template.add(Lot_description, 1, 0);
         Lot_template.add(Lot_seller, 0, 1);
-    
+
         RowConstraints row1 = new RowConstraints();
         row1.setPercentHeight(15);
         RowConstraints row2 = new RowConstraints();
@@ -149,14 +151,13 @@ public class Buyer extends User {
         Lot_template.getRowConstraints().addAll(row1, row2, row3);
 
         ColumnConstraints col1 = new ColumnConstraints();
-        col1.setPercentWidth(40);
+        col1.setPercentWidth(15);
         ColumnConstraints col2 = new ColumnConstraints();
-        col2.setPercentWidth(60);
+        col2.setPercentWidth(85);
         Lot_template.getColumnConstraints().addAll(col1, col2);
 
-
         Lot_template.setBorder(new Border(
-                new BorderStroke(Color.ALICEBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
+                new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
         return Lot_template;
     }
 

@@ -10,29 +10,29 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="Menu_grid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.Buyer">
+<GridPane fx:id="Menu_grid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.Buyer">
   <columnConstraints>
-    <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="10.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.5999755859375" minWidth="10.0" prefWidth="82.0" />
+    <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="10.0" percentWidth="80.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.5999755859375" minWidth="10.0" percentWidth="20.0" prefWidth="82.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="127.79999389648438" minHeight="2.19999995231629" prefHeight="24.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="345.0" minHeight="10.0" prefHeight="302.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="97.0" minHeight="4.600012207031284" prefHeight="62.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="127.79999389648438" minHeight="2.19999995231629" percentHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="345.0" minHeight="10.0" percentHeight="75.0" prefHeight="302.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="97.0" minHeight="4.600012207031284" percentHeight="15.0" prefHeight="62.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ScrollPane fx:id="scroll_lots" fitToWidth="true" hvalue="1.0" maxHeight="1.7976931348623157E308" maxWidth="550.0" vbarPolicy="ALWAYS" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+      <ScrollPane fx:id="scroll_lots" fitToWidth="true" hvalue="1.0" vbarPolicy="ALWAYS" vvalue="1.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP">
          <content>
-            <VBox fx:id="Vbox_lots" alignment="CENTER" maxWidth="600.0" prefWidth="500.0" style="-fx-background-color: blue;" />
+            <VBox fx:id="Vbox_lots" alignment="CENTER" style="-fx-background-color: blue;" />
          </content>
       </ScrollPane>
       <Button fx:id="add_good" mnemonicParsing="false" onAction="#AddGood" prefHeight="56.0" prefWidth="70.0" text="Add good" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-      <TextField fx:id="add_lot_input" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#AddLot_handle" prefHeight="31.0" prefWidth="463.0" style="-fx-background-color: darkgrey;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS">
+      <TextField fx:id="add_lot_input" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#AddLot_handle" prefHeight="31.0" prefWidth="463.0" style="-fx-background-color: darkgrey;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
          <GridPane.margin>
             <Insets bottom="5.0" />
          </GridPane.margin>
       </TextField>
-      <Text fx:id="add_lot_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Lot`s Name" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP">
+      <Text fx:id="add_lot_text" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Lot`s Name" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
          <GridPane.margin>
             <Insets top="5.0" />
          </GridPane.margin>
