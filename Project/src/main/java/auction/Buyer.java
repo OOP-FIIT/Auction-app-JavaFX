@@ -42,6 +42,9 @@ public class Buyer extends User {
     @FXML
     private GridPane Menu_grid;
 
+    private boolean lotIsChecked = false;
+    private int lotCheckedID = 0;
+
     private int addLotStatus = 1;
     private String LOT_NAME = "";
     private String LOT_DESCRIPTION = "";
@@ -69,8 +72,7 @@ public class Buyer extends User {
             String date = result.getString("date");
             String description = result.getString("description");
 
-            GridPane lot = CteateLotGrid(name, date, description, "seller");
-            // Text lot = new Text("ID: " + id + "\t Name: " + name + "\t Date: " + date);
+            GridPane lot = CteateLotGrid(name, date, description, "seller", id);
 
             Vbox_lots.getChildren().add(lot);
         }
@@ -118,7 +120,7 @@ public class Buyer extends User {
         PrintLots();
     }
 
-    private GridPane CteateLotGrid(String name, String date, String description, String seller) {
+    private GridPane CteateLotGrid(String name, String date, String description, String seller, String id) {
         Label Lot_name = new Label(name);
         Label Lot_date = new Label(date);
         Label Lot_description = new Label(description);
@@ -156,9 +158,25 @@ public class Buyer extends User {
         col2.setPercentWidth(85);
         Lot_template.getColumnConstraints().addAll(col1, col2);
 
+        Lot_template.setId(id);
         Lot_template.setBorder(new Border(
                 new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
+
+        Lot_template.setOnMouseClicked((event) -> {
+            if(!lotIsChecked){
+                lotIsChecked = true;
+                lotCheckedID = Integer.parseInt(Lot_template.getId());
+                Lot_template.setStyle("-fx-background-color: green;");
+                System.out.println("Lot checked: " + Lot_template.getId() + ")");
+            }else if(lotCheckedID == Integer.parseInt(Lot_template.getId())){
+                lotIsChecked = false;
+                Lot_template.setStyle("-fx-background-color: grey;");
+                System.out.println("Lot UNchecked: " + Lot_template.getId() + ")");
+            }
+            
+        });
         return Lot_template;
+
     }
 
 }

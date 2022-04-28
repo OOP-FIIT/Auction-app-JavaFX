@@ -27,12 +27,6 @@ public class SQL {
 
    }
 
-   private static void CreateDataBase() throws SQLException{
-      String create = "CREATE DATABASE IF NOT EXISTS " + DB_NAME; 
-      Statement stmt = conn.createStatement();
-      stmt.executeUpdate(create);
-   }
-
    private static void SelectDataBase() throws SQLException{
       String create = "USE " + DB_NAME; 
       Statement stmt = conn.createStatement();
@@ -61,8 +55,14 @@ public class SQL {
          return false;
    }
 
-   //CREATE-------------------------------------
+   //CREATE-------------------------------------   
 
+   private static void CreateDataBase() throws SQLException{
+      String create = "CREATE DATABASE IF NOT EXISTS " + DB_NAME; 
+      Statement stmt = conn.createStatement();
+      stmt.executeUpdate(create);
+   }
+   
    private static void CreateTables() throws SQLException{
       CreateTable_Users();
       CreateTable_Lots();
