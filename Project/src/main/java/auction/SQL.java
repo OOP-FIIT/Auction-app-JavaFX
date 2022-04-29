@@ -44,15 +44,15 @@ public class SQL {
          return false;
    }
 
-   public static boolean IsPaaswordCorrect(String login, String password) throws SQLException {
+   public static int IsPaaswordCorrect(String login, String password) throws SQLException {
       Statement stmt = conn.createStatement();
       String sql = "SELECT * FROM " + USERS_TABLENAME + " WHERE login = \"" + login + "\" AND password = " + "\"" + password
             + "\"" + ";";
       ResultSet rs = stmt.executeQuery(sql);
       if (rs.next()) {
-         return true;
+         return Integer.parseInt(rs.getString("id"));
       } else
-         return false;
+         return 0;
    }
 
    //CREATE-------------------------------------   
@@ -106,11 +106,16 @@ public class SQL {
 
    //INSERT------------------------------------
 
-   public static void InsertUser(String login, String password, String email, String mode, int balance) throws SQLException {
+   public static int InsertUser(String login, String password, String email, String mode, int balance) throws SQLException {
       Statement stmt = conn.createStatement();
       String sql = "INSERT INTO " + USERS_TABLENAME + " (login,password,email,modd,balance) VALUES('" + login + "' , '" + password + "' , '" + email + "', '" + mode + "', " + balance  + ");";
       stmt.executeUpdate(sql);
 
+      
+      sql = "SELECT id FROM " + USERS_TABLENAME + "WHERE login='" + login +"';";
+      ResultSet result = stmt.executeQuery(sql);
+      result.next();
+      return Integer.parseInt(result.getString("id"));
    }
 
    /**
@@ -126,9 +131,24 @@ public class SQL {
       stmt.executeUpdate(sql);
    }
 
-   public static void InsertBid(String Buyer, String Date, String Lot) throws SQLException {
+   public static void InsertBid(int Buyer, String Date, int Lot) throws SQLException {
       Statement stmt = conn.createStatement();
-      String sql = "INSERT INTO " + BIDS_TABLENAME + " (buyer, date, lot_id) VALUES('" + Buyer + "' , '" + Date + "' , '" + Lot + "');";
+      String sql = "INSERT INTO " + BIDS_TABLENAME + " (buyer_id, date, lot_id) VALUES('" + Buyer + "' , '" + Date + "' , " + Lot + ");";
+      stmt.executeUpdate(sql);
+   }
+
+   //UPDATE------------------------------------
+
+   public static void UPDATE_User(String password, String login, String email, String mode, Integer balance, int id) throws SQLException{
+      Statement stmt = conn.createStatement();
+      String sql = "UPDATE " + USERS_TABLENAME + " \nSET"
+      + (password != null?  " password='"  + password  +"'," :"")
+      + (login != null?     " login='"     + login     +"'," :"")
+      + (email != null?     " email='"     + email     +"'," :"" )
+      + (mode != null?      " mode='"      + mode      +"'," :"" )
+      + (balance != null?   " balance="   + balance   +"" :"" )
+      +" \nWHERE id=" + id + ";";
+      
       stmt.executeUpdate(sql);
    }
 
@@ -136,8 +156,13 @@ public class SQL {
 
    public static ResultSet SELECT_Lots() throws SQLException{
       Statement stmt = conn.createStatement();
-      String sql = "SELECT * from " + LOTS_TABLENAME;
+      String sql = "SELECT * FROM " + LOTS_TABLENAME;
       return stmt.executeQuery(sql);
    }
 
+   public static ResultSet SELECT_UserData(int userId) throws SQLException{
+      Statement stmt = conn.createStatement();
+      String sql = "SELECT * FROM " + USERS_TABLENAME + " WHERE id=" + userId + ";";
+      return stmt.executeQuery(sql);
+   }
 }

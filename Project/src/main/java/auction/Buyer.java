@@ -6,8 +6,9 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -38,25 +39,40 @@ public class Buyer extends User {
     @FXML
     private TextField add_lot_input;
     @FXML
+    private TextField add_bid_input;
+    @FXML
     private Text add_lot_text;
+    @FXML
+    private Label userBalance_text;
     @FXML
     private GridPane Menu_grid;
 
+    private final String LOT_BG_COLOR = "TEAL";
+    private final String CHECKED_LOT_BG_COLOR = "MEDIUMSPRINGGREEN";
+
     private boolean lotIsChecked = false;
     private int lotCheckedID = 0;
+    private GridPane lotChecked;
 
     private int addLotStatus = 1;
     private String LOT_NAME = "";
     private String LOT_DESCRIPTION = "";
 
-    // Polymorphism
-    public void AddGood() throws SQLException {
-        PrintLots();
-    }
-
     public void initialize() throws SQLException {
         PrintLots();
         Platform.runLater(() -> add_lot_input.requestFocus());
+        // UpdateUserData();
+        add_bid_input.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                    String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    add_bid_input.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+    
+        
     }
 
     private void PrintLots() throws SQLException {
@@ -89,23 +105,6 @@ public class Buyer extends User {
         Platform.runLater(() -> add_lot_input.requestFocus());
     }
 
-    public void AddLot_handle(KeyEvent ke) throws ParseException, SQLException, IOException {
-        String input = "";
-        if (ke.getCode().equals(KeyCode.ENTER)) {
-            input = add_lot_input.getText();
-
-            switch (addLotStatus) {
-                case 1:
-                    AddLot_Name(input);
-                    break;
-                case 2:
-                    AddLot_Description(input);
-                    break;
-            }
-
-        }
-    }
-
     private void AddLot_Description(String input) throws SQLException {
         LOT_DESCRIPTION = input;
         add_lot_input.setText("");
@@ -136,7 +135,7 @@ public class Buyer extends User {
         Lot_seller.setStyle("-fx-text-fill: green;  ");
 
         GridPane Lot_template = new GridPane();
-        Lot_template.setStyle("-fx-background-color: grey;");
+        Lot_template.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
         Lot_template.setGridLinesVisible(true);
 
         Lot_template.add(Lot_name, 0, 0);
@@ -163,20 +162,61 @@ public class Buyer extends User {
                 new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
 
         Lot_template.setOnMouseClicked((event) -> {
-            if(!lotIsChecked){
+            if (!lotIsChecked) {
+                // Save SQL id, FXML id, status
                 lotIsChecked = true;
                 lotCheckedID = Integer.parseInt(Lot_template.getId());
-                Lot_template.setStyle("-fx-background-color: green;");
-                System.out.println("Lot checked: " + Lot_template.getId() + ")");
-            }else if(lotCheckedID == Integer.parseInt(Lot_template.getId())){
+                lotChecked = Lot_template;
+                Lot_template.setStyle("-fx-background-color: " + CHECKED_LOT_BG_COLOR + ";");
+            } else if (lotCheckedID == Integer.parseInt(Lot_template.getId())) {
                 lotIsChecked = false;
-                Lot_template.setStyle("-fx-background-color: grey;");
-                System.out.println("Lot UNchecked: " + Lot_template.getId() + ")");
+                Lot_template.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
+            } else {
+                lotChecked.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
+                lotCheckedID = Integer.parseInt(Lot_template.getId());
+                lotChecked = Lot_template;
+                Lot_template.setStyle("-fx-background-color: " + CHECKED_LOT_BG_COLOR + ";");
             }
-            
+
         });
         return Lot_template;
 
     }
+
+    private void UpdateUserData() throws SQLException{
+        Model.UpdateUser();
+        userBalance_text.setText(String.valueOf(Model.getUSER().getBalance()));
+    }
+    // Handlers-------------------------------
+
+    public void AddLot_handle(KeyEvent ke) throws ParseException, SQLException, IOException {
+        String input = "";
+        if (ke.getCode().equals(KeyCode.ENTER)) {
+            input = add_lot_input.getText();
+
+            switch (addLotStatus) {
+                case 1:
+                    AddLot_Name(input);
+                    break;
+                case 2:
+                    AddLot_Description(input);
+                    break;
+            }
+
+        }
+    }
+
+    public void addBid_handle(KeyEvent ke) throws ParseException, SQLException, IOException{
+        if (ke.getCode().equals(KeyCode.ENTER)) {
+
+            if(Model.tryAddBid(Integer.parseInt(add_bid_input.getText()), lotCheckedID)){
+
+            }
+            else{
+                
+            }
+        }
+    }
+
 
 }

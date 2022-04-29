@@ -25,3 +25,10 @@ In this section, define the most important pieces of code that have been impleme
 All diagrams can be found at the following [link](Documentation/001_uml_diagrams).
 
 ## Project Skeleton
+
+
+### Questions about project
+    -Should we serialize AND deserialize object, or only serialize in some file?
+    -Controller class in java considers as GUI or model?
+    -What about presentation after 15.05?
+    -How much comments need to be writed? 

@@ -58,9 +58,10 @@ public class PrimaryController {
     }
 
     private void handle_password(String login, String password) throws SQLException, IOException {
-        if (sing_in_password == true) {
-            if (SQL.IsPaaswordCorrect(login, password))
-                switchToMenu();
+        if (sing_in_password == true) {            
+            int userID = SQL.IsPaaswordCorrect(login, password);
+            if (userID != 0)
+                switchToMenu("superUser", userID);
             else {
                 password_input_mainScene.setText("");
                 password_text_mainScene.setText("Please, try again");
@@ -206,22 +207,33 @@ public class PrimaryController {
 
     }
 
-    private void switchToMenu() throws IOException {
-        App.setRoot("menu");
+    private void switchToMenu(String mode, int userID) throws IOException {
+        if (mode.equals("superUser")) {
+            Model.setUSER_ID(userID);
+            App.setRoot("menu");
+        } else if (mode.equals("A")) {
+            App.setRoot("Auctioner");
+        } else if (mode.equals("B")) {
+            App.setRoot("Buyer");
+        } else if (mode.equals("S")) {
+            App.setRoot("Seller");
+        }
+
     }
 
     public void handle_buyer_button() throws SQLException, IOException {
-        SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
-        switchToMenu();
+        int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
+        switchToMenu("superUser", userID);
     }
 
     public void handle_seller_button() throws SQLException, IOException {
-        SQL.InsertUser(login_final, password_final, email_final, "s", balance_final);
-        switchToMenu();
+        int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
+        switchToMenu("superUser", userID);
     }
 
     public void handle_auctioner_button() throws SQLException, IOException {
-        SQL.InsertUser(login_final, password_final, email_final, "a", balance_final);
-        switchToMenu();
+        int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
+        switchToMenu("superUser", userID);
     }
+
 }
