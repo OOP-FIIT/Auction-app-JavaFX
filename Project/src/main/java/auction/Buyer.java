@@ -31,7 +31,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.util.converter.DateTimeStringConverter;
 
-public class Buyer extends User {
+public class Buyer extends User implements Handler{
     @FXML
     private ScrollPane scroll_lots;
     @FXML
@@ -260,10 +260,6 @@ public class Buyer extends User {
         }
     }
     
-    public void sign_out_handle(KeyEvent ke) throws IOException {
-        if (ke.getCode().equals(KeyCode.ESCAPE)) {
-            App.setRoot("primary");
-        }
-    }
+
 
 }
