@@ -173,17 +173,21 @@ public class Buyer extends User {
                 new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
 
         Lot_template.setOnMouseClicked((event) -> {
+            //Check
             if (!lotIsChecked) {
                 // Save SQL id, FXML id, status
                 lotIsChecked = true;
                 lotCheckedID = Integer.parseInt(Lot_template.getId());
                 lotChecked = Lot_template;
                 Lot_template.setStyle("-fx-background-color: " + CHECKED_LOT_BG_COLOR + ";");
-            } else if (lotCheckedID == Integer.parseInt(Lot_template.getId())) {
+            }//UNcheck 
+            else if (lotCheckedID == Integer.parseInt(Lot_template.getId())) {
                 lotIsChecked = false;
                 lotCheckedID = -1;
                 Lot_template.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
-            } else {
+            }//Check other Lot 
+            else {
+                Model.setEndAuctionFirstClick(false);
                 lotChecked.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
                 lotCheckedID = Integer.parseInt(Lot_template.getId());
                 lotChecked = Lot_template;
@@ -248,8 +252,11 @@ public class Buyer extends User {
     public void EndAuction() throws SQLException{
         if(lotCheckedID != -1){
             Model.EndAuction(lotCheckedID);
-            UpdateUserData();
-            PrintLots();
+            if(!Model.isEndAuctionFirstClick()){
+                PrintLots();
+                UpdateUserData();
+            }
+
         }
     }
     
