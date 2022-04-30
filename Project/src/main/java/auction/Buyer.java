@@ -47,6 +47,8 @@ public class Buyer extends User {
     @FXML
     private Label userBalance_text;
     @FXML
+    private Label user_login_text;
+    @FXML
     private GridPane Menu_grid;
     @FXML
     private Button end_lot_auction;
@@ -96,6 +98,7 @@ public class Buyer extends User {
             System.out.println(res.getString("login"));
             GridPane lot = CteateLotGrid(name, date, description, res.getString("login"), id);
 
+            Vbox_lots.setMaxHeight(10);
             Vbox_lots.getChildren().add(lot);
         }
 
@@ -129,16 +132,17 @@ public class Buyer extends User {
         Label Lot_name = new Label(name);
         Label Lot_date = new Label(date);
         Label Lot_description = new Label(description);
-        Label Lot_seller = new Label(seller);
+        Label Lot_seller = new Label("by: " + seller);
 
         Lot_name.setWrapText(true);
         Lot_date.setWrapText(true);
         Lot_description.setWrapText(true);
         Lot_seller.setWrapText(true);
 
-        Lot_date.setStyle("-fx-text-fill: green;  ");
+        Lot_date.setStyle("-fx-text-fill: black; -fx-font-size: 14;");
+        Lot_name.setStyle("-fx-text-fill: white; -fx-font-size: 16;");
         Lot_description.setStyle("-fx-text-fill: green;  ");
-        Lot_seller.setStyle("-fx-text-fill: green;  ");
+        Lot_seller.setStyle("-fx-text-fill: red; -fx-font-size: 24;");
 
         GridPane Lot_template = new GridPane();
         Lot_template.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
@@ -148,6 +152,7 @@ public class Buyer extends User {
         Lot_template.add(Lot_date, 0, 2);
         Lot_template.add(Lot_description, 1, 0);
         Lot_template.add(Lot_seller, 0, 1);
+        Lot_template.maxHeight(30);
 
         RowConstraints row1 = new RowConstraints();
         row1.setPercentHeight(15);
@@ -186,6 +191,9 @@ public class Buyer extends User {
             }
 
         });
+
+        Lot_template.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+
         return Lot_template;
 
     }
@@ -193,6 +201,7 @@ public class Buyer extends User {
     private void UpdateUserData() throws SQLException {
         Model.UpdateUser();
         userBalance_text.setText("Balance: " + String.valueOf(Model.getUSER().getBalance()));
+        user_login_text.setText(Model.getUSER().getLogin());
     }
     
     
@@ -241,6 +250,12 @@ public class Buyer extends User {
             Model.EndAuction(lotCheckedID);
             UpdateUserData();
             PrintLots();
+        }
+    }
+    
+    public void sign_out_handle(KeyEvent ke) throws IOException {
+        if (ke.getCode().equals(KeyCode.ESCAPE)) {
+            App.setRoot("primary");
         }
     }
 

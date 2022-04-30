@@ -58,7 +58,7 @@ public class PrimaryController {
     }
 
     private void handle_password(String login, String password) throws SQLException, IOException {
-        if (sing_in_password == true) {            
+        if (sing_in_password == true) {
             int userID = SQL.IsPaaswordCorrect(login, password);
             if (userID != 0)
                 switchToMenu("superUser", userID);
@@ -235,5 +235,6 @@ public class PrimaryController {
         int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
         switchToMenu("superUser", userID);
     }
+
 
 }

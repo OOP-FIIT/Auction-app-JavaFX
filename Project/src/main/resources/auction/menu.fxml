@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="Menu_grid" prefHeight="735.0" prefWidth="884.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.Buyer">
+<GridPane fx:id="Menu_grid" onKeyPressed="#sign_out_handle" prefHeight="735.0" prefWidth="884.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.Buyer">
   <columnConstraints>
     <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="10.0" percentWidth="80.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.5999755859375" minWidth="10.0" percentWidth="20.0" prefWidth="82.0" />
@@ -43,17 +43,20 @@
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="190.0" minHeight="0.0" percentHeight="10.0" prefHeight="0.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="392.0" minHeight="10.0" percentHeight="80.0" prefHeight="392.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="userBalance_text" alignment="CENTER" contentDisplay="CENTER" text="Label" textFill="WHITE" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Label fx:id="userBalance_text" alignment="CENTER" contentDisplay="CENTER" text="Label" textFill="WHITE" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label text="Label" GridPane.rowIndex="1" />
+            <Label fx:id="user_login_text" contentDisplay="CENTER" textFill="#00e4e4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="Cambria Bold Italic" size="24.0" />
+               </font></Label>
          </children>
       </GridPane>
       <TextField fx:id="add_bid_input" alignment="BOTTOM_CENTER" cache="true" depthTest="DISABLE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#addBid_handle" prefHeight="25.0" prefWidth="485.0" style="-fx-background-color: SLATEBLUE;" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
@@ -67,5 +70,6 @@
          </GridPane.margin>
       </Text>
       <Button fx:id="end_lot_auction" mnemonicParsing="false" onAction="#EndAuction" prefHeight="25.0" prefWidth="117.0" style="-fx-background-color: darkred;" text="End lot Auction" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <Label text="Pro Tip: enter `ESC` to Sign Out" textFill="#464646" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
    </children>
 </GridPane>
