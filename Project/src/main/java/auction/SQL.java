@@ -72,7 +72,7 @@ public class SQL {
    private static void CreateTable_Lots() throws SQLException {
       String create = "CREATE TABLE " + " IF NOT EXISTS " + LOTS_TABLENAME +
             " (id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
-            " seller INTEGER ," +            //Who
+            " seller_id INTEGER ," +         //Who
             " name VARCHAR(50), " +          //What
             " date DATETIME," +              //When
             " description VARCHAR(10000)," + //Description
@@ -99,7 +99,8 @@ public class SQL {
             " (id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
             " buyer_id INTEGER," +  //Who
             " date DATETIME," +     //When
-            " lot_id INTEGER);" ;   //Where
+            " lot_id INTEGER," +    //Where
+            " bid INTEGER);";       //How much
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(create);
    }
@@ -125,28 +126,33 @@ public class SQL {
     * @param description
     * @throws SQLException
     */
-   public static void InsertLot(String name, String description, String date) throws SQLException {
+   public static void InsertLot(String name, String description, String date, int sellerId) throws SQLException {
       Statement stmt = conn.createStatement();
-      String sql = "INSERT INTO " + LOTS_TABLENAME + " (name, date, description) VALUES('" + name + "' , '" + date + "' , '" + description + "');";
+      String sql = "INSERT INTO " + LOTS_TABLENAME + " (name, date, description, seller_id) VALUES('" + name + "' , '" + date + "' , '" + description + "' , " + sellerId + ");";
       stmt.executeUpdate(sql);
    }
 
-   public static void InsertBid(int Buyer, String Date, int Lot) throws SQLException {
+   public static void InsertBid(int Buyer, String Date, int Lot, int bid) throws SQLException {
       Statement stmt = conn.createStatement();
-      String sql = "INSERT INTO " + BIDS_TABLENAME + " (buyer_id, date, lot_id) VALUES('" + Buyer + "' , '" + Date + "' , " + Lot + ");";
+      String sql =   " INSERT INTO " + BIDS_TABLENAME + 
+                     " (buyer_id, date, lot_id, bid) " + 
+                     " VALUES('" + Buyer + "' , '" 
+                                 + Date + "' , "  
+                                 + Lot + ", " 
+                                 + bid + ");";
       stmt.executeUpdate(sql);
    }
 
    //UPDATE------------------------------------
 
-   public static void UPDATE_User(String password, String login, String email, String mode, Integer balance, int id) throws SQLException{
+   public static void UPDATE_User(String password, String login, String email, String mode, Integer balance, boolean balanceAdd, int id) throws SQLException{
       Statement stmt = conn.createStatement();
       String sql = "UPDATE " + USERS_TABLENAME + " \nSET"
       + (password != null?  " password='"  + password  +"'," :"")
       + (login != null?     " login='"     + login     +"'," :"")
       + (email != null?     " email='"     + email     +"'," :"" )
       + (mode != null?      " mode='"      + mode      +"'," :"" )
-      + (balance != null?   " balance="   + balance   +"" :"" )
+      + (balance != null?   " balance="  + (balanceAdd?"balance+":"")  + balance   +"" :"" )
       +" \nWHERE id=" + id + ";";
       
       stmt.executeUpdate(sql);
@@ -165,4 +171,44 @@ public class SQL {
       String sql = "SELECT * FROM " + USERS_TABLENAME + " WHERE id=" + userId + ";";
       return stmt.executeQuery(sql);
    }
+
+   public static ResultSet SELECT_Bids(int lotId) throws SQLException{
+      int winner = -1;
+      Statement stmt = conn.createStatement();
+      String sql =   " SELECT * FROM " + BIDS_TABLENAME + 
+                     " WHERE lot_id=" + lotId +
+                     " ORDER BY bid DESC;"
+                     ;
+               
+      ResultSet res =  stmt.executeQuery(sql);
+
+      return res;
+   }
+
+   public static int SELECT_SellerIdByLotId(int lotId) throws SQLException{
+      Statement stmt = conn.createStatement();
+      String sql =   " SELECT * FROM " + LOTS_TABLENAME +
+                     " WHERE id=" + lotId + ";";
+      ResultSet res = stmt.executeQuery(sql);
+
+      res.next();
+      return res.getInt("seller_id");
+   }
+
+   //DELELE------------------------------------
+
+   public static void DELETE_Lot(int lotId) throws SQLException{
+      Statement stmt = conn.createStatement();
+      String sql =   "DELETE FROM " + LOTS_TABLENAME + 
+                     " WHERE id=" + lotId + ";";
+      stmt.executeUpdate(sql);
+   } 
+
+   public static void DELETE_Bids(int lotId) throws SQLException{
+      Statement stmt = conn.createStatement();
+      String sql =   "DELETE FROM " + BIDS_TABLENAME + 
+                     " WHERE lot_id=" + lotId + ";";
+      stmt.executeUpdate(sql);
+   }
+
 }
