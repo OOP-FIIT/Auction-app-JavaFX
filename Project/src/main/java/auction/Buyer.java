@@ -10,11 +10,13 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -65,6 +67,8 @@ public class Buyer extends User implements Handler{
     private String LOT_DESCRIPTION = "";
 
     public void initialize() throws SQLException {
+        Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
         PrintLots();
         Platform.runLater(() -> add_lot_input.requestFocus());
         UpdateUserData();
@@ -260,9 +264,9 @@ public class Buyer extends User implements Handler{
         }
     }
     
+    //Default method inplementation
     public void sign_out_handle(KeyEvent ke) throws IOException {
-        if (ke.getCode().equals(KeyCode.ESCAPE)) {
-            App.setRoot("primary");
-        }
+        Handler.super.sign_out_handle(ke);
     }
+
 }

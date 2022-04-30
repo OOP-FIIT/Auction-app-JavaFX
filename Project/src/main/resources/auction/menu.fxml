@@ -23,9 +23,9 @@
     <RowConstraints maxHeight="172.0" minHeight="0.0" percentHeight="10.0" prefHeight="101.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ScrollPane fx:id="scroll_lots" fitToWidth="true" hvalue="1.0" vbarPolicy="ALWAYS" vvalue="1.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+      <ScrollPane fx:id="scroll_lots" fitToWidth="true" hvalue="1.0" pannable="true" style="-fx-background-color: #8B008B;" stylesheets="@scrolStyle.css" vbarPolicy="ALWAYS" vvalue="1.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP">
          <content>
-            <VBox fx:id="Vbox_lots" alignment="CENTER" style="-fx-background-color: blue;" />
+            <VBox fx:id="Vbox_lots" alignment="CENTER" style="-fx-background-color: #8B008B;" />
          </content>
       </ScrollPane>
       <TextField fx:id="add_lot_input" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#AddLot_handle" prefHeight="31.0" prefWidth="463.0" style="-fx-background-color: darkgreen;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
