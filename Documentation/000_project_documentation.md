@@ -32,3 +32,4 @@ All diagrams can be found at the following [link](Documentation/001_uml_diagrams
     -Controller class in java considers as GUI or model?
     -What about presentation after 15.05?
     -How much comments need to be writed? 
+    -providing a graphical user interface separated from application logic and with at least part of the event handlers created manually – counts as a fulfillment of two further criteria???

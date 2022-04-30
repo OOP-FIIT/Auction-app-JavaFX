@@ -43,15 +43,19 @@ public class Buyer extends User {
     @FXML
     private Text add_lot_text;
     @FXML
+    private Text add_bid_text;
+    @FXML
     private Label userBalance_text;
     @FXML
     private GridPane Menu_grid;
+    @FXML
+    private Button end_lot_auction;
 
     private final String LOT_BG_COLOR = "TEAL";
     private final String CHECKED_LOT_BG_COLOR = "MEDIUMSPRINGGREEN";
 
     private boolean lotIsChecked = false;
-    private int lotCheckedID = 0;
+    private int lotCheckedID = -1;
     private GridPane lotChecked;
 
     private int addLotStatus = 1;
@@ -86,8 +90,11 @@ public class Buyer extends User {
             String name = result.getString("name");
             String date = result.getString("date");
             String description = result.getString("description");
-
-            GridPane lot = CteateLotGrid(name, date, description, "seller", id);
+            System.out.println(result.getInt("seller_id"));
+            ResultSet res = SQL.SELECT_UserData(result.getInt("seller_id"));
+            res.next();
+            System.out.println(res.getString("login"));
+            GridPane lot = CteateLotGrid(name, date, description, res.getString("login"), id);
 
             Vbox_lots.getChildren().add(lot);
         }
@@ -114,7 +121,7 @@ public class Buyer extends User {
         Date datenow = new Date();
         String date = DATETIME.format(datenow);
         System.out.println(date);
-        SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date);
+        SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date, Model.getUSER_ID());
         PrintLots();
     }
 
@@ -169,6 +176,7 @@ public class Buyer extends User {
                 Lot_template.setStyle("-fx-background-color: " + CHECKED_LOT_BG_COLOR + ";");
             } else if (lotCheckedID == Integer.parseInt(Lot_template.getId())) {
                 lotIsChecked = false;
+                lotCheckedID = -1;
                 Lot_template.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
             } else {
                 lotChecked.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
@@ -186,6 +194,8 @@ public class Buyer extends User {
         Model.UpdateUser();
         userBalance_text.setText("Balance: " + String.valueOf(Model.getUSER().getBalance()));
     }
+    
+    
     // Handlers-------------------------------
 
     public void AddLot_handle(KeyEvent ke) throws ParseException, SQLException, IOException {
@@ -206,7 +216,7 @@ public class Buyer extends User {
     }
 
     public void addBid_handle(KeyEvent ke) throws ParseException, SQLException, IOException{
-        if (ke.getCode().equals(KeyCode.ENTER)) {
+        if (ke.getCode().equals(KeyCode.ENTER) && lotCheckedID != -1) {
             boolean res = false;
             try { 
                 res = Model.tryAddBid((add_bid_input.getText()), lotCheckedID);
@@ -216,11 +226,22 @@ public class Buyer extends User {
             
             if(res){
                 add_bid_input.setText("");
+                add_bid_text.setText("Success!");
+                UpdateUserData();
             }
             else{
-                
+                add_bid_input.setText("");
+                add_bid_text.setText("Your balance and your bid don`t love each other");
             }
     }
+    }
+
+    public void EndAuction() throws SQLException{
+        if(lotCheckedID != -1){
+            Model.EndAuction(lotCheckedID);
+            UpdateUserData();
+            PrintLots();
+        }
     }
 
 }

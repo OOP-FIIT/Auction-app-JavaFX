@@ -127,7 +127,7 @@ abstract public class User {
         Date datenow = new Date();
         String date = DATETIME.format(datenow);
         System.out.println(date);
-        SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date);
+        SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date, Model.getUSER_ID());
         PrintLots();
     }
 

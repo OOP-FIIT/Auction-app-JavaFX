@@ -99,8 +99,8 @@ public class Model {
             SimpleDateFormat DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date datenow = new java.util.Date();
             String date = DATETIME.format(datenow);
-            SQL.InsertBid(USER_ID, date, lotId);
-            SQL.UPDATE_User(null, null, null, null, user.balance - bid, USER_ID);
+            SQL.InsertBid(USER_ID, date, lotId, bid);
+            SQL.UPDATE_User(null, null, null, null, -bid, true, USER_ID);
             return true;
         }
     }
@@ -108,6 +108,37 @@ public class Model {
         //check if balance is enough to make a bid
     }
 
+    public static void EndAuction(int lotId) throws SQLException{
+        //SQL get all bids
+        int winnindBid;
+        ResultSet res = SQL.SELECT_Bids(lotId);
+        
+        //Return bid to first buyer
+        res.next();
+        SQL.UPDATE_User(null, null, null, null, res.getInt("bid"), true,  res.getInt("buyer_id"));
+        System.out.println("bid = " + res.getInt("bid") + "\t buyer: " + res.getInt("buyer_id"));
+
+        res.next();
+        winnindBid = res.getInt("bid");
+        System.out.println("bid = " + res.getInt("bid") + "\t buyer: " + res.getInt("buyer_id"));
+        SQL.UPDATE_User(null, null, null, null, 0, true,  res.getInt("buyer_id"));
+        
+        while(res.next()){
+            SQL.UPDATE_User(null, null, null, null, res.getInt("bid"), true,  res.getInt("buyer_id"));
+            System.out.println("bid = " + res.getInt("bid") + "\t buyer: " + res.getInt("buyer_id"));
+
+        }
+        int sellerId = SQL.SELECT_SellerIdByLotId(lotId);
+        SQL.UPDATE_User(null, null, null, null, winnindBid, true,  sellerId);
+        SQL.DELETE_Lot(lotId);
+        SQL.DELETE_Bids(lotId);
+        //Take 2nd the most bid\
+        //Return money to losers, 
+        //give lot to winner, 
+        //add money to seller 
+
+        //delete lot
+    }
     /**
      * @return the uSER
      */
