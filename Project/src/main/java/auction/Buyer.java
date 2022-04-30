@@ -61,7 +61,7 @@ public class Buyer extends User {
     public void initialize() throws SQLException {
         PrintLots();
         Platform.runLater(() -> add_lot_input.requestFocus());
-        // UpdateUserData();
+        UpdateUserData();
         add_bid_input.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
@@ -71,8 +71,7 @@ public class Buyer extends User {
                 }
             }
         });
-    
-        
+
     }
 
     private void PrintLots() throws SQLException {
@@ -183,9 +182,9 @@ public class Buyer extends User {
 
     }
 
-    private void UpdateUserData() throws SQLException{
+    private void UpdateUserData() throws SQLException {
         Model.UpdateUser();
-        userBalance_text.setText(String.valueOf(Model.getUSER().getBalance()));
+        userBalance_text.setText("Balance: " + String.valueOf(Model.getUSER().getBalance()));
     }
     // Handlers-------------------------------
 
@@ -208,15 +207,20 @@ public class Buyer extends User {
 
     public void addBid_handle(KeyEvent ke) throws ParseException, SQLException, IOException{
         if (ke.getCode().equals(KeyCode.ENTER)) {
-
-            if(Model.tryAddBid(Integer.parseInt(add_bid_input.getText()), lotCheckedID)){
-
+            boolean res = false;
+            try { 
+                res = Model.tryAddBid((add_bid_input.getText()), lotCheckedID);
+            }catch(BidException e){
+                System.out.println(e);
+            }
+            
+            if(res){
+                add_bid_input.setText("");
             }
             else{
                 
             }
-        }
     }
-
+    }
 
 }

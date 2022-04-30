@@ -15,7 +15,7 @@ public class Model {
         private String email;
         private int balance;
 
-        public UserData(int userId) throws SQLException{
+        public UserData(int userId) throws SQLException {
             ResultSet res = SQL.SELECT_UserData(userId);
             res.next();
             this.login = res.getString("login");
@@ -30,52 +30,66 @@ public class Model {
         public int getId() {
             return id;
         }
+
         /**
          * @param id the id to set
          */
         public void setId(int id) {
             this.id = id;
         }
+
         /**
          * @return the login
          */
         public String getLogin() {
             return login;
         }
+
         /**
          * @param login the login to set
          */
         public void setLogin(String login) {
             this.login = login;
         }
+
         /**
          * @return the email
          */
         public String getEmail() {
             return email;
         }
+
         /**
          * @param email the email to set
          */
         public void setEmail(String email) {
             this.email = email;
         }
+
         /**
          * @return the balance
          */
         public int getBalance() {
             return balance;
         }
+
         /**
          * @param balance the balance to set
          */
         public void setBalance(int balance) {
             this.balance = balance;
         }
-        
+
     }
 
-    public static boolean tryAddBid(int bid, int lotId) throws SQLException {
+    public static boolean tryAddBid(String bidStr, int lotId) throws SQLException, BidException {
+        if(bidStr.equals("")){
+            throw new BidException("You cannot add [EMPTY] bid");    
+        }else if(bidStr.equals("0")){
+            throw new BidException("You cannot add [0] bid");    
+        }else{
+
+        int bid = Integer.parseInt(bidStr);
         UserData user = new UserData(USER_ID);
         System.out.println(user.balance);
         if(user.getBalance() < bid)
@@ -86,9 +100,10 @@ public class Model {
             Date datenow = new java.util.Date();
             String date = DATETIME.format(datenow);
             SQL.InsertBid(USER_ID, date, lotId);
-            SQL.UPDATE_User(null, null, null, null, user.balance + 10, USER_ID);
+            SQL.UPDATE_User(null, null, null, null, user.balance - bid, USER_ID);
             return true;
         }
+    }
         //get userData from SQL
         //check if balance is enough to make a bid
     }
@@ -107,7 +122,7 @@ public class Model {
         USER = uSER;
     }
 
-    public static void UpdateUser() throws SQLException{
+    public static void UpdateUser() throws SQLException {
         setUSER(new UserData(USER_ID));
     }
 
