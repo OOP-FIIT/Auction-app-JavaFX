@@ -178,7 +178,7 @@ public class PrimaryController {
             }
         });
 
-        session.setDebug(true);
+        session.setDebug(false);
 
         try {
             // Create a default MimeMessage object.

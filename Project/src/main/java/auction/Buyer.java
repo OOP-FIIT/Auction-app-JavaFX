@@ -260,6 +260,9 @@ public class Buyer extends User implements Handler{
         }
     }
     
-
-
+    public void sign_out_handle(KeyEvent ke) throws IOException {
+        if (ke.getCode().equals(KeyCode.ESCAPE)) {
+            App.setRoot("primary");
+        }
+    }
 }
