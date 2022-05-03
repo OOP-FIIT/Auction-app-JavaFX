@@ -1,14 +1,1 @@
-Project/client/client/pom.xml
-Project/client/client/.vscode/settings.json
-Project/client/client/src/main/java/module-info.java
-Project/client/client/src/main/java/client/App.java
-Project/client/client/src/main/java/client/PrimaryController.java
-Project/client/client/src/main/java/client/SecondaryController.java
-Project/client/client/src/main/resources/client/primary.fxml
-Project/client/client/src/main/resources/client/secondary.fxml
-Project/client/client/target/classes/module-info.class
-Project/client/client/target/classes/client/App.class
-Project/client/client/target/classes/client/primary.fxml
-Project/client/client/target/classes/client/PrimaryController.class
-Project/client/client/target/classes/client/secondary.fxml
-Project/client/client/target/classes/client/SecondaryController.class
+
