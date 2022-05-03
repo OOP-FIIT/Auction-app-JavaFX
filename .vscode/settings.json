@@ -1,0 +1,4 @@
+{
+    "maven.executable.preferMavenWrapper": true,
+    "maven.executable.options": ""
+}
