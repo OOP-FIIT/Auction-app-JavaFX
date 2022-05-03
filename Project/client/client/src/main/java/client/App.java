@@ -8,20 +8,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
+import java.sql.SQLException;
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 
-import org.java_websocket.client.*;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
-
+    public static WebSocketClient io;
     private static Scene scene;
 
     @Override
@@ -40,9 +37,10 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) throws URISyntaxException {
+    public static void main(String[] args) throws URISyntaxException, SQLException {
+      SQL.InitSql();
 
-        WebSocketClient io = new WebSocketClient(new URI("ws://localhost:8887")) {
+        io = new WebSocketClient(new URI("ws://localhost:8887")) {
 
           
             @Override
@@ -73,7 +71,6 @@ public class App extends Application {
           
           };
           io.connect();
-
                   launch();
 
     }

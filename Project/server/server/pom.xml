@@ -26,6 +26,19 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>io.github.qsy7.java.dependencies</groupId>
+      <artifactId>javamail</artifactId>
+      <version>0.1.2</version>
+      <type>pom</type>
+  </dependency>
+
+
+  <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.28</version>
+  </dependency>
+    <dependency>
       <groupId>org.java-websocket</groupId>
       <artifactId>Java-WebSocket</artifactId>
       <version>1.5.3</version>

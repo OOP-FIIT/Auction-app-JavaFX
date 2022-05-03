@@ -73,6 +73,9 @@ public class ChatServer extends WebSocketServer {
   @Override
   public void onMessage(WebSocket conn, String message) {
     broadcast(message);
+    if(message.equals("1")){
+      System.out.println("111111111111111111");
+    }
     System.out.println(conn + ": " + message);
   }
 
