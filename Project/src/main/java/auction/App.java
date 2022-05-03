@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import java.net.*;
 import java.sql.SQLException;
 import java.io.*;
-import org.java_websocket.client.*;
 
 import auction.SQL;
 
