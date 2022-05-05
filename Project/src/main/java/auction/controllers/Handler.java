@@ -1,7 +1,8 @@
-package auction;
+package auction.controllers;
 
 import java.io.IOException;
 
+import auction.App;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 

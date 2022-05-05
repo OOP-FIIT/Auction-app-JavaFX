@@ -1,6 +1,6 @@
-package auction;
+package auction.exception;
 
-class BidException extends Exception  
+public class BidException extends Exception  
 {  
     public BidException (String str)  
     {  

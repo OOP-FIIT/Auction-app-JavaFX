@@ -9,10 +9,12 @@ import javafx.stage.Stage;
 
 import java.net.*;
 import java.sql.SQLException;
+
+import auction.SQL.SQL;
+import auction.controllers.User;
+import auction.shared.Const;
+
 import java.io.*;
-
-import auction.SQL;
-
 import java.io.IOException;
 
 /**
@@ -32,7 +34,7 @@ public class App extends Application {
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 

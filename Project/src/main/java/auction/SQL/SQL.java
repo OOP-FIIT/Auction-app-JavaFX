@@ -1,10 +1,12 @@
-package auction;
+package auction.SQL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import auction.shared.Const;
 
 public class SQL {
    private static Connection conn;

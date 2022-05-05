@@ -5,6 +5,10 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import auction.SQL.SQL;
+import auction.exception.BidException;
+import auction.shared.Const;
+
 public class Model {
     private String[] ProTip = { "DoubleClick on (End Auction) deletes Lot even if there was no bids" };
     private static int USER_ID = 0;

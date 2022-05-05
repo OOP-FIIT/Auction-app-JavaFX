@@ -1,4 +1,4 @@
-package auction;
+package auction.controllers;
 public class Auctioner extends User{
 
     //Polymorphism

@@ -1,4 +1,4 @@
-package auction;
+package auction.controllers;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -6,6 +6,11 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import auction.Model;
+import auction.SQL.SQL;
+import auction.exception.BidException;
+import auction.shared.Const;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,7 +38,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.util.converter.DateTimeStringConverter;
 
-public class Buyer extends User{
+public class User implements Handler{
     @FXML
     private ScrollPane scroll_lots;
     @FXML
@@ -87,23 +92,20 @@ public class Buyer extends User{
     private void PrintLots() throws SQLException {
         Vbox_lots.getChildren().clear();
 
-        ResultSet result = SQL.SELECT_Lots();
+        ResultSet lot = SQL.SELECT_Lots();
 
         Vbox_lots.setMaxHeight(50);
 
-        while (result.next()) {
-            String id = result.getString("id");
-            String name = result.getString("name");
-            String date = result.getString("date");
-            String description = result.getString("description");
-            System.out.println(result.getInt("seller_id"));
-            ResultSet res = SQL.SELECT_UserData(result.getInt("seller_id"));
-            res.next();
-            System.out.println(res.getString("login"));
-            GridPane lot = CteateLotGrid(name, date, description, res.getString("login"), id);
+        while (lot.next()) {
+            String id = lot.getString(Const.LOTS_ID);
+            String name = lot.getString(Const.LOTS_NAME);
+            String date = lot.getString(Const.LOTS_DATE);
+            String description = lot.getString(Const.LOTS_DESCRIPTION);
+            ResultSet user = SQL.SELECT_UserData(lot.getInt(Const.LOTS_SELLER_ID));
+            user.next();
+            GridPane lotGrid = CteateLotGrid(name, date, description, user.getString(Const.USERDATA_LOGIN), id);
 
-            Vbox_lots.setMaxHeight(10);
-            Vbox_lots.getChildren().add(lot);
+            Vbox_lots.getChildren().add(lotGrid);
         }
 
     }
@@ -127,8 +129,8 @@ public class Buyer extends User{
         SimpleDateFormat DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date datenow = new Date();
         String date = DATETIME.format(datenow);
-        System.out.println(date);
         SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date, Model.getUSER_ID());
+        System.out.println("You have added new lot: " + LOT_NAME);
         PrintLots();
     }
 
@@ -242,6 +244,7 @@ public class Buyer extends User{
             }
             
             if(res){
+                System.out.println("You have successfully added ew bid(" + add_bid_input.getText() + ") to lot: " + lotCheckedID);
                 add_bid_input.setText("");
                 add_bid_text.setText("Success!");
                 UpdateUserData();
@@ -264,5 +267,9 @@ public class Buyer extends User{
         }
     }
     
+    //Default method inplementation
+    public void sign_out_handle(KeyEvent ke) throws IOException {
+        Handler.super.sign_out_handle(ke);
+    }
 
 }

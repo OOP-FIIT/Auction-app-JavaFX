@@ -1,4 +1,4 @@
-package auction;
+package auction.shared;
 
 public final class Const {
     public static final String DB_URL = "jdbc:mysql://localhost/";

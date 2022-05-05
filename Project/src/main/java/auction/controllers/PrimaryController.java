@@ -1,4 +1,4 @@
-package auction;
+package auction.controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -15,6 +15,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javax.mail.*;
 import javax.mail.internet.*;
+
+import auction.App;
+import auction.Model;
+import auction.SQL.SQL;
 
 public class PrimaryController {
     private Random rand;

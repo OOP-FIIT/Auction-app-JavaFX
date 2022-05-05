@@ -1,4 +1,4 @@
-package auction;
+package auction.controllers;
 public class Seller extends User{
         //Polymorphism
         public void handle_button(){

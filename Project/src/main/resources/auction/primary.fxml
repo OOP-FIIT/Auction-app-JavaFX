@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="mainScene" alignment="CENTER" cache="true" cacheHint="SPEED" focusTraversable="true" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" snapToPixel="false" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.PrimaryController">
+<GridPane fx:id="mainScene" alignment="CENTER" cache="true" cacheHint="SPEED" focusTraversable="true" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" snapToPixel="false" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.controllers.PrimaryController">
   <columnConstraints>
       <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="ALWAYS" minWidth="-Infinity" />
   </columnConstraints>
