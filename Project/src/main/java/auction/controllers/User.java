@@ -16,8 +16,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
@@ -29,24 +31,21 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
-import javafx.util.converter.DateTimeStringConverter;
 
 public class User implements Handler{
     @FXML
-    private ScrollPane scroll_lots;
+    protected ScrollPane scroll_lots;
     @FXML
-    private VBox Vbox_lots;
+    protected VBox Vbox_lots;
     @FXML
-    private TextField add_lot_input;
+    protected TextField add_lot_input;
     @FXML
-    private TextField add_bid_input;
+    protected TextField add_bid_input;
     @FXML
     private Text add_lot_text;
     @FXML
@@ -58,7 +57,7 @@ public class User implements Handler{
     @FXML
     private GridPane Menu_grid;
     @FXML
-    private Button end_lot_auction;
+    protected Button end_lot_auction;
 
     private final String LOT_BG_COLOR = "TEAL";
     private final String CHECKED_LOT_BG_COLOR = "MEDIUMSPRINGGREEN";
@@ -70,6 +69,7 @@ public class User implements Handler{
     private int addLotStatus = 1;
     private String LOT_NAME = "";
     private String LOT_DESCRIPTION = "";
+
 
     public void initialize() throws SQLException {
         Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -89,7 +89,7 @@ public class User implements Handler{
 
     }
 
-    private void PrintLots() throws SQLException {
+    protected void PrintLots() throws SQLException {
         Vbox_lots.getChildren().clear();
 
         ResultSet lot = SQL.SELECT_Lots();
@@ -208,7 +208,7 @@ public class User implements Handler{
 
     }
 
-    private void UpdateUserData() throws SQLException {
+    protected void UpdateUserData() throws SQLException {
         Model.UpdateUser();
         userBalance_text.setText("Balance: " + String.valueOf(Model.getUSER().getBalance()));
         user_login_text.setText(Model.getUSER().getLogin());

@@ -65,7 +65,7 @@ public class PrimaryController {
         if (sing_in_password == true) {
             int userID = SQL.IsPaaswordCorrect(login, password);
             if (userID != 0)
-                switchToMenu("superUser", userID);
+                switchToMenu("S", userID);
             else {
                 password_input_mainScene.setText("");
                 password_text_mainScene.setText("Please, try again");
@@ -221,7 +221,8 @@ public class PrimaryController {
         } else if (mode.equals("B")) {
             App.setRoot("Buyer");
         } else if (mode.equals("S")) {
-            App.setRoot("Seller");
+            Model.setUSER_ID(userID);
+            App.changeScene("menu", new Seller());
         }
 
     }
@@ -233,7 +234,7 @@ public class PrimaryController {
 
     public void handle_seller_button() throws SQLException, IOException {
         int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
-        switchToMenu("superUser", userID);
+        switchToMenu("S", userID);
     }
 
     public void handle_auctioner_button() throws SQLException, IOException {
