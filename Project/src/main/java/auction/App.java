@@ -27,7 +27,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 600, 400);
+        scene = new Scene(loadFXML(Const.LOGIN_SCENE), 600, 400);
         stage.setScene(scene);
         stage.show();
     }
@@ -39,6 +39,13 @@ public class App extends Application {
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
+    }
+
+    public static void changeScene(String fxml, User user) throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        fxmlLoader.setController(user);;
+        scene.setRoot(fxmlLoader.load());
+        System.out.println("You have signed in as SuperUser");
     }
 
     public static void main(String[] args) throws SQLException {

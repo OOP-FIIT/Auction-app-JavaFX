@@ -210,7 +210,8 @@ public class PrimaryController {
     private void switchToMenu(String mode, int userID) throws IOException {
         if (mode.equals("superUser")) {
             Model.setUSER_ID(userID);
-            App.setRoot("menu");
+            App.changeScene("menu", new User());
+            // App.setRoot("menu");
         } else if (mode.equals("A")) {
             App.setRoot("Auctioner");
         } else if (mode.equals("B")) {

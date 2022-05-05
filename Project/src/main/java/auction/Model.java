@@ -20,9 +20,9 @@ public class Model {
         public UserData(int userId) throws SQLException {
             ResultSet res = SQL.SELECT_UserData(userId);
             res.next();
-            this.login = res.getString("login");
-            this.balance = res.getInt("balance");
-            this.email = res.getString("email");
+            this.login = res.getString(Const.USERDATA_LOGIN);
+            this.balance = res.getInt(Const.USERDATA_BALANCE);
+            this.email = res.getString(Const.USERDATA_EMAIL);
             this.id = userId;
         }
 
@@ -93,11 +93,9 @@ public class Model {
 
             int bid = Integer.parseInt(bidStr);
             UserData user = new UserData(USER_ID);
-            System.out.println(user.balance);
             if (user.getBalance() < bid)
                 return false;
             else {
-                System.out.println("Id : " + USER_ID);
                 SimpleDateFormat DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date datenow = new java.util.Date();
                 String date = DATETIME.format(datenow);
@@ -123,6 +121,7 @@ public class Model {
                         "You`ve tried to finish auction without bids, click button one more time to delete this Lot");
                 return;
             } else {
+                System.out.println("Lot with id: " + lotId + " ENDED--");
                 EndAuctionFirstClick = false;
                 SQL.DELETE_Lot(lotId);
                 SQL.DELETE_Bids(lotId);
@@ -134,7 +133,6 @@ public class Model {
         bid = res.getInt("bid");
         buyer_id = res.getInt("buyer_id");
         SQL.UPDATE_User(null, null, null, null, bid, true, buyer_id);
-        System.out.println("bid = " + res.getInt("bid") + "\t buyer: " + res.getInt("buyer_id"));
 
         // If only 1 bid - then it wins
         if (!res.next()) {
@@ -154,13 +152,10 @@ public class Model {
         }
 
         winningBid = res.getInt("bid");
-        System.out.println("bid = " + res.getInt("bid") + "\t buyer: " + res.getInt("buyer_id"));
         SQL.UPDATE_User(null, null, null, null, 0, true, res.getInt("buyer_id"));
 
         while (res.next()) {
             SQL.UPDATE_User(null, null, null, null, res.getInt("bid"), true, res.getInt("buyer_id"));
-            System.out.println("bid = " + res.getInt("bid") + "\t buyer: " + res.getInt("buyer_id"));
-
         }
         int sellerId = SQL.SELECT_SellerIdByLotId(lotId);
         SQL.UPDATE_User(null, null, null, null, winningBid, true, sellerId);
