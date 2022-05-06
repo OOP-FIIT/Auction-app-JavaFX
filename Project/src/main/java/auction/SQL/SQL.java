@@ -70,13 +70,13 @@ public class SQL {
    }
 
    private static void CreateTable_Lots() throws SQLException {
-      String create = "CREATE TABLE " + " IF NOT EXISTS " + Const.SQL.LOTS +
-            " (id INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
-            " seller_id INTEGER ," +         //Who
-            " name VARCHAR(50), " +          //What
-            " date DATETIME," +              //When
-            " description VARCHAR(10000)," + //Description
-            " PRIMARY KEY (id))";
+      String create = "CREATE TABLE " + " IF NOT EXISTS " + Const.SQL.LOTS + " (" +
+                                    Const.SQL.LOTS_ID          + " INTEGER NOT NULL UNIQUE AUTO_INCREMENT," +
+                                    Const.SQL.LOTS_SELLER_ID   + " INTEGER ," +             //Who
+                                    Const.SQL.LOTS_NAME        + " VARCHAR(50), " +         //What
+                                    Const.SQL.LOTS_DATE        + " DATETIME," +             //When
+                                    Const.SQL.LOTS_DESCRIPTION + " VARCHAR(10000)," +       //Description
+                                    " PRIMARY KEY ("+ Const.SQL.LOTS_ID +"))";
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(create);
    }
@@ -115,11 +115,12 @@ public class SQL {
                                        Const.SQL.USERDATA_MODE + ", " + 
                                        Const.SQL.USERDATA_BALANCE + ") " + 
                                        "VALUES('" + 
-                                                login + "' , '" + 
+                                                login    + "' , '" + 
                                                 password + "' , '" + 
-                                                email + "', '" + 
-                                                mode + "', " + 
-                                                balance  + ");";
+                                                email    + "', '"  + 
+                                                mode     + "', "   + 
+                                                balance  + 
+                                                ");";
       
       stmt.executeUpdate(sql);
 
