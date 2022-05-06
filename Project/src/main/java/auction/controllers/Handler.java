@@ -9,9 +9,9 @@ import javafx.scene.input.KeyEvent;
 
 public interface Handler {
 
-    default public void sign_out_handle(KeyEvent ke) throws IOException {
+    public default void sign_out_handle(KeyEvent ke) throws IOException {
         if (ke.getCode().equals(KeyCode.ESCAPE)) {
-            App.setRoot(Const.LOGIN_SCENE);
+            App.setRoot(Const.FXML.LOGIN_SCENE);
         }
     }
 }

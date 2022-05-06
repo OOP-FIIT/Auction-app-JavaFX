@@ -97,13 +97,13 @@ public class User implements Handler{
         Vbox_lots.setMaxHeight(50);
 
         while (lot.next()) {
-            String id = lot.getString(Const.LOTS_ID);
-            String name = lot.getString(Const.LOTS_NAME);
-            String date = lot.getString(Const.LOTS_DATE);
-            String description = lot.getString(Const.LOTS_DESCRIPTION);
-            ResultSet user = SQL.SELECT_UserData(lot.getInt(Const.LOTS_SELLER_ID));
+            String id = lot.getString(Const.SQL.LOTS_ID);
+            String name = lot.getString(Const.SQL.LOTS_NAME);
+            String date = lot.getString(Const.SQL.LOTS_DATE);
+            String description = lot.getString(Const.SQL.LOTS_DESCRIPTION);
+            ResultSet user = SQL.SELECT_UserData(lot.getInt(Const.SQL.LOTS_SELLER_ID));
             user.next();
-            GridPane lotGrid = CteateLotGrid(name, date, description, user.getString(Const.USERDATA_LOGIN), id);
+            GridPane lotGrid = CteateLotGrid(name, date, description, user.getString(Const.SQL.USERDATA_LOGIN), id);
 
             Vbox_lots.getChildren().add(lotGrid);
         }
