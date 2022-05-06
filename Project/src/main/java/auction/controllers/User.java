@@ -47,7 +47,7 @@ public class User implements Handler{
     @FXML
     protected TextField add_bid_input;
     @FXML
-    private Text add_lot_text;
+    protected Text add_lot_text;
     @FXML
     private Text add_bid_text;
     @FXML

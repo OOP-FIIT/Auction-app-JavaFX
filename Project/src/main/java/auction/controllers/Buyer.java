@@ -37,39 +37,19 @@ import javafx.scene.text.Text;
 import javafx.util.converter.DateTimeStringConverter;
 
 public class Buyer extends User{
-    @FXML
-    private ScrollPane scroll_lots;
-    @FXML
-    private VBox Vbox_lots;
-    @FXML
-    private TextField add_lot_input;
-    @FXML
-    private TextField add_bid_input;
-    @FXML
-    private Text add_lot_text;
-    @FXML
-    private Text add_bid_text;
-    @FXML
-    private Label userBalance_text;
-    @FXML
-    private Label user_login_text;
-    @FXML
-    private GridPane Menu_grid;
-    @FXML
-    private Button end_lot_auction;
 
-    private final String LOT_BG_COLOR = "TEAL";
-    private final String CHECKED_LOT_BG_COLOR = "MEDIUMSPRINGGREEN";
+    @Override
+    public void initialize() throws SQLException {
+        add_lot_input.setDisable(true);
+        add_lot_text.setText("Try PRO version to use this)");
+        end_lot_auction.setDisable(true);
+        Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
+        PrintLots();
+        Platform.runLater(() -> add_lot_input.requestFocus());
+        UpdateUserData();
 
-    private boolean lotIsChecked = false;
-    private int lotCheckedID = -1;
-    private GridPane lotChecked;
-
-    private int addLotStatus = 1;
-    private String LOT_NAME = "";
-    private String LOT_DESCRIPTION = "";
-
-   
+    }
     
 
 }
