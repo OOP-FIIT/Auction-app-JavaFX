@@ -42,6 +42,26 @@ public final class Const {
     public static final class FXML{
         public static final String LOGIN_SCENE = "primary";
         public static final String AUCTION_SCENE = "menu";
+
+        public static final String[] PRO_TIPS = {
+            "DoubleClick on (End Auction) deletes Lot even if there was no bids" ,
+        };
+
+
+    }
+
+    public static final class MAIL{
+        public static final String LOGIN = "sichkaruk.company@gmail.com";
+        public static final String PASSWORD = "Company_2001";
+        public static final String HOST = "smtp.gmail.com";
+        public static final String MESSAGE(int activationCode){
+           return "Wake up, Neo..."                     + " \n" + 
+                  "The Matrix has you..."               + " \n" + 
+                  "Follow the code: " + activationCode  + " \n\n" + 
+                  "Knock, Knock, Neo.";
+        }
+        
+
     }
 
 }
