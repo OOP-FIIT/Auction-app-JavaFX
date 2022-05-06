@@ -19,6 +19,7 @@ import javax.mail.internet.*;
 import auction.App;
 import auction.Model;
 import auction.SQL.SQL;
+import auction.shared.Const;
 
 public class PrimaryController {
     private Random rand;
@@ -62,16 +63,19 @@ public class PrimaryController {
     }
 
     private void handle_password(String login, String password) throws SQLException, IOException {
-        if (sing_in_password == true) {
+        if (sing_in_password) {
             int userID = SQL.IsPaaswordCorrect(login, password);
+            Model.setUSER_ID(userID);
+            Model.UpdateUser();
+            String mode =  Model.getUSER().getMode();
             if (userID != 0)
-                switchToMenu("S", userID);
+                switchToMenu(mode, userID);
             else {
                 password_input_mainScene.setText("");
                 password_text_mainScene.setText("Please, try again");
             }
         } else {
-            if (password_1_try == false) {
+            if (!password_1_try) {
                 save_password_1_try = password;
                 password_1_try = true;
                 password_input_mainScene.setText("");
@@ -212,24 +216,25 @@ public class PrimaryController {
     }
 
     private void switchToMenu(String mode, int userID) throws IOException {
-        if (mode.equals("superUser")) {
+        if (mode.equals(Const.SQL.USER_MODE_PRO)) {
             Model.setUSER_ID(userID);
-            App.changeScene("menu", new User());
-            // App.setRoot("menu");
-        } else if (mode.equals("A")) {
-            App.setRoot("Auctioner");
-        } else if (mode.equals("B")) {
-            App.setRoot("Buyer");
-        } else if (mode.equals("S")) {
+            App.changeScene(Const.FXML.AUCTION_SCENE, new User());
+        } else if (mode.equals(Const.SQL.USER_MODE_AUCTIONER)) {
             Model.setUSER_ID(userID);
-            App.changeScene("menu", new Seller());
+            App.changeScene(Const.FXML.AUCTION_SCENE, new Auctioner());        
+        } else if (mode.equals(Const.SQL.USER_MODE_BUYER)) {
+            Model.setUSER_ID(userID);
+            App.changeScene(Const.FXML.AUCTION_SCENE, new Buyer());
+        } else if (mode.equals(Const.SQL.USER_MODE_SELLER)) {
+            Model.setUSER_ID(userID);
+            App.changeScene(Const.FXML.AUCTION_SCENE, new Seller());
         }
 
     }
 
     public void handle_buyer_button() throws SQLException, IOException {
         int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
-        switchToMenu("superUser", userID);
+        switchToMenu(Const.SQL.USER_MODE_PRO, userID);
     }
 
     public void handle_seller_button() throws SQLException, IOException {
@@ -239,7 +244,7 @@ public class PrimaryController {
 
     public void handle_auctioner_button() throws SQLException, IOException {
         int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
-        switchToMenu("superUser", userID);
+        switchToMenu(Const.SQL.USER_MODE_PRO, userID);
     }
 
 
