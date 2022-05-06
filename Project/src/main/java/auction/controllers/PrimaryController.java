@@ -23,7 +23,7 @@ import auction.shared.Const;
 
 public class PrimaryController {
     private Random rand;
-    private int activation_code;
+    private int activationCode;
     private boolean sing_in_password = true;
     private String save_password_1_try = "";
     private boolean password_1_try = false;
@@ -156,7 +156,7 @@ public class PrimaryController {
             rand = new Random();
             balance_final = rand.nextInt(100000);
         } else {
-            if (Integer.parseInt(email) == activation_code) {
+            if (Integer.parseInt(email) == activationCode) {
                 email_text_mainScene.setText("Beautiful, last thing to do - choose yours account mode");
                 user_modes_grid.setVisible(true);
 
@@ -169,12 +169,10 @@ public class PrimaryController {
 
     private void send_activation_mail(String reciever) {
 
-        String mail_sender = "sichkaruk.company@gmail.com";
-        String mail_password = "Company_2001";
-        String host = "smtp.gmail.com";
+
 
         Properties properties = System.getProperties();
-        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.host", Const.MAIL.HOST);
         properties.put("mail.smtp.port", "465");
         properties.put("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.auth", "true");
@@ -182,7 +180,7 @@ public class PrimaryController {
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(mail_sender, mail_password);
+                return new PasswordAuthentication(Const.MAIL.LOGIN, Const.MAIL.PASSWORD);
             }
         });
 
@@ -193,17 +191,16 @@ public class PrimaryController {
             MimeMessage message = new MimeMessage(session);
 
             // Set From: header field of the header.
-            message.setFrom(new InternetAddress(mail_sender));
+            message.setFrom(new InternetAddress(Const.MAIL.LOGIN));
 
             // Set To: header field of the header.
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
             rand = new Random();
             // Set Subject: header field
-            activation_code = rand.nextInt(100000);
-            message.setSubject("Code: " + activation_code);
+            activationCode = rand.nextInt(100000);
+            message.setSubject("Code: " + activationCode);
 
-            message.setText("Wake up, Neo...\nThe Matrix has you...\nFollow the code: " + activation_code
-                    + "\n\n Knock, Knock, Neo.");
+            message.setText(Const.MAIL.MESSAGE(activationCode));
 
             System.out.println("sending...");
             // Send message
@@ -233,17 +230,17 @@ public class PrimaryController {
     }
 
     public void handle_buyer_button() throws SQLException, IOException {
-        int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
+        int userID = SQL.InsertUser(login_final, password_final, email_final, Const.SQL.USER_MODE_BUYER, balance_final);
         switchToMenu(Const.SQL.USER_MODE_PRO, userID);
     }
 
     public void handle_seller_button() throws SQLException, IOException {
-        int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
-        switchToMenu("S", userID);
+        int userID = SQL.InsertUser(login_final, password_final, email_final, Const.SQL.USER_MODE_SELLER, balance_final);
+        switchToMenu(Const.SQL.USER_MODE_SELLER, userID);
     }
 
     public void handle_auctioner_button() throws SQLException, IOException {
-        int userID = SQL.InsertUser(login_final, password_final, email_final, "b", balance_final);
+        int userID = SQL.InsertUser(login_final, password_final, email_final, Const.SQL.USER_MODE_AUCTIONER, balance_final);
         switchToMenu(Const.SQL.USER_MODE_PRO, userID);
     }
 
