@@ -20,13 +20,15 @@ public class Model {
         private String login;
         private String email;
         private int balance;
+        private String mode;
 
         public UserData(int userId) throws SQLException {
             ResultSet res = SQL.SELECT_UserData(userId);
             res.next();
-            this.login = res.getString(Const.USERDATA_LOGIN);
-            this.balance = res.getInt(Const.USERDATA_BALANCE);
-            this.email = res.getString(Const.USERDATA_EMAIL);
+            this.login = res.getString(Const.SQL.USERDATA_LOGIN);
+            this.balance = res.getInt(Const.SQL.USERDATA_BALANCE);
+            this.email = res.getString(Const.SQL.USERDATA_EMAIL);
+            this.mode = res.getString(Const.SQL.USERDATA_MODE);
             this.id = userId;
         }
 
@@ -84,6 +86,20 @@ public class Model {
          */
         public void setBalance(int balance) {
             this.balance = balance;
+        }
+
+        /**
+         * @return the mode
+         */
+        public String getMode() {
+            return mode;
+        }
+
+        /**
+         * @param mode the mode to set
+         */
+        public void setMode(String mode) {
+            this.mode = mode;
         }
 
     }
