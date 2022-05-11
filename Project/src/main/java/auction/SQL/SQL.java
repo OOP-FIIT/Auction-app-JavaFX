@@ -186,6 +186,18 @@ public class SQL {
       stmt.executeUpdate(sql);
    }
 
+   public static void UPDATE_UserLicense(String licenseKey, int id) throws SQLException{
+      Statement stmt = conn.createStatement();
+      String sql = 
+      "UPDATE " + Const.SQL.USERDATA + " " + 
+      "\nSET "
+      + Const.SQL.USERDATA_LICENSE + "='"  + licenseKey  +"', " 
+      + Const.SQL.USERDATA_MODE + "='" + Const.SQL.USER_MODE_PRO + "' " 
+      +"\nWHERE "              + Const.SQL.USERDATA_ID        + "="   + id + ";";
+      
+      stmt.executeUpdate(sql);
+   }
+
    //SELECT------------------------------------
 
    public static ResultSet SELECT_Lots() throws SQLException{
