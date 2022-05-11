@@ -216,7 +216,6 @@ public class SQL {
    }
 
    public static ResultSet SELECT_Bids(int lotId) throws SQLException{
-      int winner = -1;
       Statement stmt = conn.createStatement();
       String sql = " SELECT * FROM " + Const.SQL.BIDS + 
                    " WHERE "         + Const.SQL.BIDS_LOT_ID + "=" + lotId +

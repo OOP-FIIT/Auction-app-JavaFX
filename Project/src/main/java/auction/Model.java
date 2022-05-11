@@ -160,7 +160,7 @@ public class Model {
         // check if balance is enough to make a bid
     }
 
-    public static void EndAuction(int lotId) throws SQLException {
+    public static void endAuction(int lotId) throws SQLException {
         // SQL get all bids
         int winningBid, bid, buyer_id;
         ResultSet res = SQL.SELECT_Bids(lotId);
@@ -181,9 +181,9 @@ public class Model {
             }
         }
 
-        winningBid = res.getInt("bid");
-        bid = res.getInt("bid");
-        buyer_id = res.getInt("buyer_id");
+        winningBid = res.getInt(Const.SQL.BIDS_BID);
+        bid = res.getInt(Const.SQL.BIDS_BID);
+        buyer_id = res.getInt(Const.SQL.BIDS_BUYER_ID);
         SQL.UPDATE_User(null, null, null, null, bid, true, buyer_id);
 
         // If only 1 bid - then it wins
@@ -194,7 +194,6 @@ public class Model {
             SQL.UPDATE_User(null, null, null, null, -winningBid, true, bid);
             // Give money to seller
             SQL.UPDATE_User(null, null, null, null, winningBid, true, sellerId);
-            // Delete Lot and related bids;
             SQL.DELETE_Lot(lotId);
             SQL.DELETE_Bids(lotId);
 
@@ -203,7 +202,7 @@ public class Model {
 
         }
 
-        winningBid = res.getInt("bid");
+        winningBid = res.getInt(Const.SQL.BIDS_BID);
         SQL.UPDATE_User(null, null, null, null, 0, true, res.getInt("buyer_id"));
 
         while (res.next()) {
@@ -264,8 +263,8 @@ public class Model {
     /**
      * @param endAuctionFirstClick the endAuctionFirstClick to set
      */
-    public static void setEndAuctionFirstClick(boolean endAuctionFirstClick) {
-        endAuctionFirstClick = endAuctionFirstClick;
+    public static void setEndAuctionFirstClick(boolean state) {
+        endAuctionFirstClick = state;
     }
 
     public static void setLicenseKey() throws NoSuchAlgorithmException, SQLException, IOException {
@@ -284,6 +283,7 @@ public class Model {
 
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(Const.MAIL.LOGIN, Const.MAIL.PASSWORD);
             }
@@ -345,7 +345,6 @@ public class Model {
             file.write(licenseJSON.toJSONString());
             file.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         System.out.println("JSON file created: " + licenseKey);

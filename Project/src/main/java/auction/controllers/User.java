@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import auction.App;
 import auction.Model;
 import auction.exception.BidException;
 import auction.shared.Const;
@@ -17,7 +16,6 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -139,7 +137,6 @@ public class User implements Handler{
         Date datenow = new Date();
         String date = DATETIME.format(datenow);
         SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date, Model.getUserId());
-        System.out.println("You have added new lot: " + LOT_NAME);
         PrintLots();
     }
 
@@ -267,7 +264,7 @@ public class User implements Handler{
 
     public void endAuction() throws SQLException{
         if(lotCheckedID != -1){
-            Model.EndAuction(lotCheckedID);
+            Model.endAuction(lotCheckedID);
             if(!Model.isEndAuctionFirstClick()){
                 PrintLots();
                 UpdateUserData();

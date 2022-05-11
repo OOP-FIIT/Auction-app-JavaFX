@@ -45,7 +45,7 @@ public final class Const {
         public static final String AUCTION_SCENE = "menu";
         public static final String BUY_PRO_WINDOW = "BUYPRO";
 
-        public static final String[] PRO_TIPS = {
+        protected static final String[] PRO_TIPS = {
             "DoubleClick on (End Auction) deletes Lot even if there was no bids" ,
         };
 
@@ -56,7 +56,7 @@ public final class Const {
         public static final String LOGIN = "sichkaruk.company@gmail.com";
         public static final String PASSWORD = "Company_2001";
         public static final String HOST = "smtp.gmail.com";
-        public static final String MESSAGE(int activationCode){
+        public static final String getCodeMessage(int activationCode){
            return "Wake up, Neo..."                     + " \n" + 
                   "The Matrix has you..."               + " \n" + 
                   "Follow the code: " + activationCode  + " \n\n" + 
