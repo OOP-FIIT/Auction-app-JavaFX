@@ -27,7 +27,8 @@ public class Seller extends User{
             PrintLots();
             Platform.runLater(() -> add_lot_input.requestFocus());
             UpdateUserData();
-    
+            setProBanner();
+
         }
 
 }

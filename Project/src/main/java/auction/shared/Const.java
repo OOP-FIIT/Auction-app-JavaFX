@@ -15,6 +15,7 @@ public final class Const {
             public static final String USERDATA_EMAIL = "email";     
             public static final String USERDATA_MODE = "mode";     
             public static final String USERDATA_BALANCE = "balance";     
+            public static final String USERDATA_LICENSE = "license";     
         
         
         public static final String LOTS = "Lots";
@@ -42,6 +43,7 @@ public final class Const {
     public static final class FXML{
         public static final String LOGIN_SCENE = "primary";
         public static final String AUCTION_SCENE = "menu";
+        public static final String BUY_PRO_WINDOW = "BUYPRO";
 
         public static final String[] PRO_TIPS = {
             "DoubleClick on (End Auction) deletes Lot even if there was no bids" ,

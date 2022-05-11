@@ -1,16 +1,33 @@
 package auction;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.*;
+import javax.mail.internet.*;
+
 import auction.SQL.SQL;
+import auction.controllers.User;
 import auction.exception.BidException;
 import auction.shared.Const;
 
 public class Model {
-    private String[] ProTip = { "DoubleClick on (End Auction) deletes Lot even if there was no bids" };
     private static int USER_ID = 0;
     private static UserData USER;
     private static boolean EndAuctionFirstClick = false;
@@ -21,6 +38,7 @@ public class Model {
         private String email;
         private int balance;
         private String mode;
+        private String license;
 
         public UserData(int userId) throws SQLException {
             ResultSet res = SQL.SELECT_UserData(userId);
@@ -29,6 +47,7 @@ public class Model {
             this.balance = res.getInt(Const.SQL.USERDATA_BALANCE);
             this.email = res.getString(Const.SQL.USERDATA_EMAIL);
             this.mode = res.getString(Const.SQL.USERDATA_MODE);
+            this.license = res.getString(Const.SQL.USERDATA_LICENSE);
             this.id = userId;
         }
 
@@ -102,6 +121,19 @@ public class Model {
             this.mode = mode;
         }
 
+        /**
+         * @return the license
+         */
+        public String getLicense() {
+            return license;
+        }
+
+        /**
+         * @param license the license to set
+         */
+        public void setLicense(String license) {
+            this.license = license;
+        }
     }
 
     public static boolean tryAddBid(String bidStr, int lotId) throws SQLException, BidException {
@@ -236,4 +268,133 @@ public class Model {
         EndAuctionFirstClick = endAuctionFirstClick;
     }
 
+    public static void setLicenseKey() throws NoSuchAlgorithmException, SQLException, IOException {
+        String licenseKey = generateLicenseKey();
+        sendLicenseEmail(licenseKey);
+        SQL.UPDATE_UserLicense(licenseKey, USER.getId());
+        App.changeScene(Const.FXML.AUCTION_SCENE, new User());
+    }
+
+    private static void sendLicenseEmail(String licenseKey) throws NoSuchAlgorithmException, SQLException {
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", Const.MAIL.HOST);
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(Const.MAIL.LOGIN, Const.MAIL.PASSWORD);
+            }
+        });
+
+        session.setDebug(false);
+
+        try {
+            // Create a default MimeMessage object.
+            MimeMessage message = new MimeMessage(session);
+
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(Const.MAIL.LOGIN));
+
+            // Set To: header field of the header.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(USER.getEmail()));
+            // Set Subject: header field
+            message.setSubject("License Key");
+
+            message.setText(licenseKey);
+            System.out.println(licenseKey);
+            setLicenseJSON();
+            System.out.println("sending...");
+            // Send message
+            // Create a multipar message
+            Multipart multipart = new MimeMultipart();
+
+            // Set text message part
+
+            // Part two is attachment
+            BodyPart messageBodyPart = new MimeBodyPart();
+            multipart.addBodyPart(messageBodyPart);
+
+            // Now set the actual message
+            messageBodyPart.setText("This is message body");
+            messageBodyPart = new MimeBodyPart();
+            String filename = "license.json";
+            DataSource source = new FileDataSource(filename);
+            messageBodyPart.setDataHandler(new DataHandler(source));
+            messageBodyPart.setFileName(filename);
+            multipart.addBodyPart(messageBodyPart);
+
+            // Send the complete message parts
+            message.setContent(multipart);
+            Transport.send(message);
+            System.out.println("Sent message successfully....");
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    }
+
+    private static void setLicenseJSON() throws SQLException, NoSuchAlgorithmException {
+        JSONObject licenseJSON = new JSONObject();
+        String licenseKey = generateLicenseKey();
+        licenseJSON.put("key", licenseKey);
+        licenseJSON.put("login", USER.getLogin());
+        try {
+            FileWriter file = new FileWriter("license.json");
+            file.write(licenseJSON.toJSONString());
+            file.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("JSON file created: " + licenseKey);
+
+    }
+
+    private static String generateLicenseKey() throws NoSuchAlgorithmException {
+        String tohash = USER.getId() + USER.getEmail() + USER.getLogin();
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedhash = digest.digest(tohash.getBytes(StandardCharsets.UTF_8));
+        return bytesToHex(encodedhash);
+    }
+
+    private static String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
+    public static boolean verifyLicense() throws SQLException, IOException {
+        UpdateUser();
+        String licenseKey = getLicenseJSON();
+        if(licenseKey == null)
+            return false;
+
+            return licenseKey.equals(USER.getLicense());
+    }
+
+    private static String getLicenseJSON(){
+        JSONParser jsonParser = new JSONParser();
+        String licenseKey = "";
+        try {
+            JSONObject licenseKeyJSON = (JSONObject) jsonParser.parse(new FileReader("license.json"));
+             licenseKey = (String) licenseKeyJSON.get("key");
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return licenseKey;
+    }
 }

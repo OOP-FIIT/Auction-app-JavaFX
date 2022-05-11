@@ -1,12 +1,14 @@
 package auction.controllers;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import auction.App;
 import auction.Model;
 import auction.SQL.SQL;
 import auction.exception.BidException;
@@ -15,6 +17,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -55,7 +58,13 @@ public class User implements Handler{
     @FXML
     private Label user_login_text;
     @FXML
+    private Label currentVersionLable;
+    @FXML
     private GridPane Menu_grid;
+    @FXML
+    protected GridPane userInfo_GRIDPANE;
+    @FXML
+    protected GridPane proBannerGrid;
     @FXML
     protected Button end_lot_auction;
 
@@ -272,4 +281,11 @@ public class User implements Handler{
         Handler.super.sign_out_handle(ke);
     }
 
+    public void setProBanner(){
+        proBannerGrid.setVisible(true);
+    }
+
+    public void buyPro() throws NoSuchAlgorithmException, SQLException, IOException{
+        Model.setLicenseKey();
+    }
 }

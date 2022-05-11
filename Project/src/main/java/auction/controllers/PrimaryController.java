@@ -6,7 +6,6 @@ import java.util.Properties;
 import java.util.Random;
 
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -67,7 +66,7 @@ public class PrimaryController {
             int userID = SQL.IsPaaswordCorrect(login, password);
             Model.setUSER_ID(userID);
             Model.UpdateUser();
-            String mode =  Model.getUSER().getMode();
+            String mode = Model.getUSER().getMode();
             if (userID != 0)
                 switchToMenu(mode, userID);
             else {
@@ -146,7 +145,7 @@ public class PrimaryController {
 
     private void handle_email(String login, String password, String email) {
         if (email_input == true) {
-            send_activation_mail(email);
+            sendActivationMail(email);
             email_text_mainScene.setText("Super, now just put your verification code here");
             email_input_mainScene.clear();
             ;
@@ -167,9 +166,7 @@ public class PrimaryController {
         }
     }
 
-    private void send_activation_mail(String reciever) {
-
-
+    private void sendActivationMail(String reciever) {
 
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", Const.MAIL.HOST);
@@ -212,18 +209,19 @@ public class PrimaryController {
 
     }
 
-    private void switchToMenu(String mode, int userID) throws IOException {
+    private void switchToMenu(String mode, int userID) throws IOException, SQLException {
+        Model.setUSER_ID(userID);
         if (mode.equals(Const.SQL.USER_MODE_PRO)) {
-            Model.setUSER_ID(userID);
-            App.changeScene(Const.FXML.AUCTION_SCENE, new User());
+            if (Model.verifyLicense())
+                App.changeScene(Const.FXML.AUCTION_SCENE, new User());
+            else
+                App.changeScene(Const.FXML.AUCTION_SCENE, new Seller());
+
         } else if (mode.equals(Const.SQL.USER_MODE_AUCTIONER)) {
-            Model.setUSER_ID(userID);
-            App.changeScene(Const.FXML.AUCTION_SCENE, new Auctioner());        
+            App.changeScene(Const.FXML.AUCTION_SCENE, new Auctioner());
         } else if (mode.equals(Const.SQL.USER_MODE_BUYER)) {
-            Model.setUSER_ID(userID);
             App.changeScene(Const.FXML.AUCTION_SCENE, new Buyer());
         } else if (mode.equals(Const.SQL.USER_MODE_SELLER)) {
-            Model.setUSER_ID(userID);
             App.changeScene(Const.FXML.AUCTION_SCENE, new Seller());
         }
 
@@ -235,15 +233,15 @@ public class PrimaryController {
     }
 
     public void handle_seller_button() throws SQLException, IOException {
-        int userID = SQL.InsertUser(login_final, password_final, email_final, Const.SQL.USER_MODE_SELLER, balance_final);
+        int userID = SQL.InsertUser(login_final, password_final, email_final, Const.SQL.USER_MODE_SELLER,
+                balance_final);
         switchToMenu(Const.SQL.USER_MODE_SELLER, userID);
     }
 
     public void handle_auctioner_button() throws SQLException, IOException {
-        int userID = SQL.InsertUser(login_final, password_final, email_final, Const.SQL.USER_MODE_AUCTIONER, balance_final);
+        int userID = SQL.InsertUser(login_final, password_final, email_final, Const.SQL.USER_MODE_AUCTIONER,
+                balance_final);
         switchToMenu(Const.SQL.USER_MODE_PRO, userID);
     }
-
-
 
 }
