@@ -22,15 +22,15 @@ import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import auction.SQL.SQL;
 import auction.controllers.User;
 import auction.exception.BidException;
 import auction.shared.Const;
+import auction.sql.SQL;
 
 public class Model {
-    private static int USER_ID = 0;
-    private static UserData USER;
-    private static boolean EndAuctionFirstClick = false;
+    private static int userId = 0;
+    private static UserData currentUser;
+    private static boolean endAuctionFirstClick = false;
 
     public static class UserData {
         private int id;
@@ -144,15 +144,15 @@ public class Model {
         } else {
 
             int bid = Integer.parseInt(bidStr);
-            UserData user = new UserData(USER_ID);
+            UserData user = new UserData(userId);
             if (user.getBalance() < bid)
                 return false;
             else {
                 SimpleDateFormat DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date datenow = new java.util.Date();
                 String date = DATETIME.format(datenow);
-                SQL.InsertBid(USER_ID, date, lotId, bid);
-                SQL.UPDATE_User(null, null, null, null, -bid, true, USER_ID);
+                SQL.InsertBid(userId, date, lotId, bid);
+                SQL.UPDATE_User(null, null, null, null, -bid, true, userId);
                 return true;
             }
         }
@@ -167,14 +167,14 @@ public class Model {
 
         // Return bid to first buyer
         if (!res.next()) {
-            if (!EndAuctionFirstClick) {
-                EndAuctionFirstClick = true;
+            if (!endAuctionFirstClick) {
+                endAuctionFirstClick = true;
                 System.out.println(
                         "You`ve tried to finish auction without bids, click button one more time to delete this Lot");
                 return;
             } else {
                 System.out.println("Lot with id: " + lotId + " ENDED--");
-                EndAuctionFirstClick = false;
+                endAuctionFirstClick = false;
                 SQL.DELETE_Lot(lotId);
                 SQL.DELETE_Bids(lotId);
                 return;
@@ -226,52 +226,52 @@ public class Model {
      * @return the uSER
      */
     public static UserData getUSER() {
-        return USER;
+        return currentUser;
     }
 
     /**
      * @param uSER the uSER to set
      */
     public static void setUSER(UserData uSER) {
-        USER = uSER;
+        currentUser = uSER;
     }
 
     public static void UpdateUser() throws SQLException {
-        setUSER(new UserData(USER_ID));
+        setUSER(new UserData(userId));
     }
 
     /**
      * @return the uSER_ID
      */
-    public static int getUSER_ID() {
-        return USER_ID;
+    public static int getUserId() {
+        return userId;
     }
 
     /**
      * @param uSER_ID the uSER_ID to set
      */
     public static void setUSER_ID(int uSER_ID) {
-        USER_ID = uSER_ID;
+        userId = uSER_ID;
     }
 
     /**
      * @return the endAuctionFirstClick
      */
     public static boolean isEndAuctionFirstClick() {
-        return EndAuctionFirstClick;
+        return endAuctionFirstClick;
     }
 
     /**
      * @param endAuctionFirstClick the endAuctionFirstClick to set
      */
     public static void setEndAuctionFirstClick(boolean endAuctionFirstClick) {
-        EndAuctionFirstClick = endAuctionFirstClick;
+        endAuctionFirstClick = endAuctionFirstClick;
     }
 
     public static void setLicenseKey() throws NoSuchAlgorithmException, SQLException, IOException {
         String licenseKey = generateLicenseKey();
         sendLicenseEmail(licenseKey);
-        SQL.UPDATE_UserLicense(licenseKey, USER.getId());
+        SQL.UPDATE_UserLicense(licenseKey, currentUser.getId());
         App.changeScene(Const.FXML.AUCTION_SCENE, new User());
     }
 
@@ -299,7 +299,7 @@ public class Model {
             message.setFrom(new InternetAddress(Const.MAIL.LOGIN));
 
             // Set To: header field of the header.
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(USER.getEmail()));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(currentUser.getEmail()));
             // Set Subject: header field
             message.setSubject("License Key");
 
@@ -339,7 +339,7 @@ public class Model {
         JSONObject licenseJSON = new JSONObject();
         String licenseKey = generateLicenseKey();
         licenseJSON.put("key", licenseKey);
-        licenseJSON.put("login", USER.getLogin());
+        licenseJSON.put("login", currentUser.getLogin());
         try {
             FileWriter file = new FileWriter("license.json");
             file.write(licenseJSON.toJSONString());
@@ -353,7 +353,7 @@ public class Model {
     }
 
     private static String generateLicenseKey() throws NoSuchAlgorithmException {
-        String tohash = USER.getId() + USER.getEmail() + USER.getLogin();
+        String tohash = currentUser.getId() + currentUser.getEmail() + currentUser.getLogin();
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedhash = digest.digest(tohash.getBytes(StandardCharsets.UTF_8));
         return bytesToHex(encodedhash);
@@ -374,10 +374,11 @@ public class Model {
     public static boolean verifyLicense() throws SQLException, IOException {
         UpdateUser();
         String licenseKey = getLicenseJSON();
+        System.out.println("your key :" + licenseKey);
         if(licenseKey == null)
             return false;
 
-            return licenseKey.equals(USER.getLicense());
+            return licenseKey.equals(currentUser.getLicense());
     }
 
     private static String getLicenseJSON(){
@@ -397,4 +398,6 @@ public class Model {
 
         return licenseKey;
     }
+
+
 }

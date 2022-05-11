@@ -3,9 +3,9 @@ package auction;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import auction.SQL.SQL;
 import auction.controllers.User;
 import auction.shared.Const;
+import auction.sql.SQL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,7 +18,7 @@ public class App extends Application {
  
     // constructor to put ip address and port
 
-    private static Scene scene;
+    public static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -43,7 +43,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws SQLException {
-        SQL.InitSql();
+        SQL.initSql();
         launch();
     }
 

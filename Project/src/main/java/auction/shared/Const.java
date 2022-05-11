@@ -41,7 +41,7 @@ public final class Const {
 
 
     public static final class FXML{
-        public static final String LOGIN_SCENE = "primary";
+        public static final String LOGIN_SCENE = "auth";
         public static final String AUCTION_SCENE = "menu";
         public static final String BUY_PRO_WINDOW = "BUYPRO";
 

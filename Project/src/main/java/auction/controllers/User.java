@@ -10,9 +10,9 @@ import java.util.Date;
 
 import auction.App;
 import auction.Model;
-import auction.SQL.SQL;
 import auction.exception.BidException;
 import auction.shared.Const;
+import auction.sql.SQL;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -112,7 +112,7 @@ public class User implements Handler{
             String description = lot.getString(Const.SQL.LOTS_DESCRIPTION);
             ResultSet user = SQL.SELECT_UserData(lot.getInt(Const.SQL.LOTS_SELLER_ID));
             user.next();
-            GridPane lotGrid = CteateLotGrid(name, date, description, user.getString(Const.SQL.USERDATA_LOGIN), id);
+            GridPane lotGrid = getLotGrid(name, date, description, user.getString(Const.SQL.USERDATA_LOGIN), id);
 
             Vbox_lots.getChildren().add(lotGrid);
         }
@@ -138,12 +138,12 @@ public class User implements Handler{
         SimpleDateFormat DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date datenow = new Date();
         String date = DATETIME.format(datenow);
-        SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date, Model.getUSER_ID());
+        SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date, Model.getUserId());
         System.out.println("You have added new lot: " + LOT_NAME);
         PrintLots();
     }
 
-    private GridPane CteateLotGrid(String name, String date, String description, String seller, String id) {
+    private GridPane getLotGrid(String name, String date, String description, String seller, String id) {
         Label Lot_name = new Label(name);
         Label Lot_date = new Label(date);
         Label Lot_description = new Label(description);
@@ -265,7 +265,7 @@ public class User implements Handler{
     }
     }
 
-    public void EndAuction() throws SQLException{
+    public void endAuction() throws SQLException{
         if(lotCheckedID != -1){
             Model.EndAuction(lotCheckedID);
             if(!Model.isEndAuctionFirstClick()){
@@ -277,12 +277,20 @@ public class User implements Handler{
     }
     
     //Default method inplementation
-    public void sign_out_handle(KeyEvent ke) throws IOException {
-        Handler.super.sign_out_handle(ke);
+    public void signOutHandle(KeyEvent ke) throws IOException {
+        Handler.super.signOutHandle(ke);
     }
 
     public void setProBanner(){
+        if(this.getClass() == (new Buyer()).getClass())
+            currentVersionLable.setText("Buyer");
+        if(this.getClass() == (new Auctioner()).getClass())
+            currentVersionLable.setText("Auctioner");
+        if(this.getClass() == (new Seller()).getClass())
+            currentVersionLable.setText("Sellers");
+        
         proBannerGrid.setVisible(true);
+
     }
 
     public void buyPro() throws NoSuchAlgorithmException, SQLException, IOException{

@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="Menu_grid" onKeyPressed="#sign_out_handle" prefHeight="735.0" prefWidth="884.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="Menu_grid" onKeyPressed="#signOutHandle" prefHeight="735.0" prefWidth="884.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="10.0" percentWidth="80.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.5999755859375" minWidth="10.0" percentWidth="20.0" prefWidth="82.0" />
@@ -57,7 +57,7 @@
                <font>
                   <Font name="Cambria Bold Italic" size="24.0" />
                </font></Label>
-            <GridPane fx:id="proBannerGrid" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: black;" visible="false" GridPane.rowIndex="2">
+            <GridPane fx:id="proBannerGrid" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: black;" GridPane.rowIndex="2">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
                </columnConstraints>
@@ -124,7 +124,7 @@
             <Insets bottom="40.0" />
          </GridPane.margin>
       </Text>
-      <Button fx:id="end_lot_auction" mnemonicParsing="false" onAction="#EndAuction" prefHeight="25.0" prefWidth="117.0" style="-fx-background-color: darkred;" text="End lot Auction" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <Button fx:id="end_lot_auction" mnemonicParsing="false" onAction="#endAuction" prefHeight="25.0" prefWidth="117.0" style="-fx-background-color: darkred;" text="End lot Auction" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
       <Label text="Pro Tip: enter `ESC` to Sign Out" textFill="#464646" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
    </children>
 </GridPane>

@@ -1,4 +1,4 @@
-package auction.SQL;
+package auction.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,16 +13,16 @@ public class SQL {
 
    // INIT--------------------------------------
 
-   public static void InitSql() throws SQLException {
+   public static void initSql() throws SQLException {
       // Open a connection
       conn = DriverManager.getConnection(Const.SQL.DB_URL, Const.SQL.DB_LOGIN, Const.SQL.DB_PASS);
       CreateDataBase(); //
-      SelectDataBase(); // Auction
+      selectDataBase(); // Auction
       CreateTables();   // Users | Lots | Bids
 
    }
 
-   private static void SelectDataBase() throws SQLException{
+   private static void selectDataBase() throws SQLException{
       String sql = "USE " + Const.SQL.DB_NAME; 
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(sql);

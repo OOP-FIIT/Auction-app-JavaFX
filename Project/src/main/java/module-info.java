@@ -1,6 +1,6 @@
 module auction {
-    requires javafx.controls;
-    requires javafx.fxml;
+    requires transitive javafx.controls;
+    requires transitive javafx.fxml;
     requires java.sql;
     requires javax.mail.api;
     requires activation;
