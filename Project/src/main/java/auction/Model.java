@@ -321,7 +321,7 @@ public class Model {
             // Now set the actual message
             messageBodyPart.setText("This is message body");
             messageBodyPart = new MimeBodyPart();
-            String filename = "license.json";
+            String filename = currentUser.getLogin() + ".json";
             DataSource source = new FileDataSource(filename);
             messageBodyPart.setDataHandler(new DataHandler(source));
             messageBodyPart.setFileName(filename);
@@ -342,7 +342,7 @@ public class Model {
         licenseJSON.put("key", licenseKey);
         licenseJSON.put("login", currentUser.getLogin());
         try {
-            FileWriter file = new FileWriter("license.json");
+            FileWriter file = new FileWriter(currentUser.getLogin() + ".json");
             file.write(licenseJSON.toJSONString());
             file.close();
         } catch (IOException e) {
@@ -382,7 +382,7 @@ public class Model {
     }
 
     private static String getLicenseJSON(File file){
-        String path = "license.json";
+        String path = currentUser.getLogin() + ".json";
         if(file != null)
             path = file.getPath();
 
