@@ -3,7 +3,6 @@ package auction;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -11,22 +10,18 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.*;
-import javax.mail.internet.*;
-
 import auction.controllers.User;
 import auction.exception.BidException;
 import auction.shared.Const;
 import auction.sql.SQL;
+import auction.threads.SendLicenseEmail;
+import auction.threads.UpdateLicense;
 
 public class Model {
     private static int userId = 0;
@@ -143,7 +138,6 @@ public class Model {
         } else if (bidStr.equals("0")) {
             throw new BidException("You cannot add [0] bid");
         } else {
-
             int bid = Integer.parseInt(bidStr);
             UserData user = new UserData(userId);
             if (user.getBalance() < bid)
@@ -163,7 +157,9 @@ public class Model {
 
     public static void endAuction(int lotId) throws SQLException {
         // SQL get all bids
-        int winningBid, bid, buyer_id;
+        int winningBid;
+        int bid;
+        int buyerId;
         ResultSet res = SQL.SELECT_Bids(lotId);
 
         // Return bid to first buyer
@@ -184,8 +180,8 @@ public class Model {
 
         winningBid = res.getInt(Const.SQL.BIDS_BID);
         bid = res.getInt(Const.SQL.BIDS_BID);
-        buyer_id = res.getInt(Const.SQL.BIDS_BUYER_ID);
-        SQL.UPDATE_User(null, null, null, null, bid, true, buyer_id);
+        buyerId = res.getInt(Const.SQL.BIDS_BUYER_ID);
+        SQL.UPDATE_User(null, null, null, null, bid, true, buyerId);
 
         // If only 1 bid - then it wins
         if (!res.next()) {
@@ -236,7 +232,7 @@ public class Model {
         currentUser = uSER;
     }
 
-    public static void UpdateUser() throws SQLException {
+    public static void updateUser() throws SQLException {
         setUSER(new UserData(userId));
     }
 
@@ -248,10 +244,10 @@ public class Model {
     }
 
     /**
-     * @param uSER_ID the uSER_ID to set
+     * @param userId the uSER_ID to set
      */
-    public static void setUSER_ID(int uSER_ID) {
-        userId = uSER_ID;
+    public static void setUserId(int newUserId) {
+        userId = newUserId;
     }
 
     /**
@@ -270,87 +266,14 @@ public class Model {
 
     public static void setLicenseKey() throws NoSuchAlgorithmException, SQLException, IOException {
         String licenseKey = generateLicenseKey();
-        sendLicenseEmail(licenseKey);
-        SQL.UPDATE_UserLicense(licenseKey, currentUser.getId());
+        Thread sendLicenseThread = new SendLicenseEmail(licenseKey, currentUser.getEmail(), currentUser.getLogin());
+        sendLicenseThread.start();        
+        //Update license record in SQL 
+        Thread updateLicense = new UpdateLicense(licenseKey, currentUser.getId());
+        updateLicense.start();
         App.changeScene(Const.FXML.AUCTION_SCENE, new User());
     }
 
-    private static void sendLicenseEmail(String licenseKey) throws NoSuchAlgorithmException, SQLException {
-        Properties properties = System.getProperties();
-        properties.put("mail.smtp.host", Const.MAIL.HOST);
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.enable", "true");
-        properties.put("mail.smtp.auth", "true");
-
-        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(Const.MAIL.LOGIN, Const.MAIL.PASSWORD);
-            }
-        });
-
-        session.setDebug(false);
-
-        try {
-            // Create a default MimeMessage object.
-            MimeMessage message = new MimeMessage(session);
-
-            // Set From: header field of the header.
-            message.setFrom(new InternetAddress(Const.MAIL.LOGIN));
-
-            // Set To: header field of the header.
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(currentUser.getEmail()));
-            // Set Subject: header field
-            message.setSubject("License Key");
-
-            message.setText(licenseKey);
-            System.out.println(licenseKey);
-            setLicenseJSON();
-            System.out.println("sending...");
-            // Send message
-            // Create a multipar message
-            Multipart multipart = new MimeMultipart();
-
-            // Set text message part
-
-            // Part two is attachment
-            BodyPart messageBodyPart = new MimeBodyPart();
-            multipart.addBodyPart(messageBodyPart);
-
-            // Now set the actual message
-            messageBodyPart.setText("This is message body");
-            messageBodyPart = new MimeBodyPart();
-            String filename = currentUser.getLogin() + ".json";
-            DataSource source = new FileDataSource(filename);
-            messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setFileName(filename);
-            multipart.addBodyPart(messageBodyPart);
-
-            // Send the complete message parts
-            message.setContent(multipart);
-            Transport.send(message);
-            System.out.println("Sent message successfully....");
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
-        }
-    }
-
-    private static void setLicenseJSON() throws SQLException, NoSuchAlgorithmException {
-        JSONObject licenseJSON = new JSONObject();
-        String licenseKey = generateLicenseKey();
-        licenseJSON.put("key", licenseKey);
-        licenseJSON.put("login", currentUser.getLogin());
-        try {
-            FileWriter file = new FileWriter(currentUser.getLogin() + ".json");
-            file.write(licenseJSON.toJSONString());
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("JSON file created: " + licenseKey);
-
-    }
 
     private static String generateLicenseKey() throws NoSuchAlgorithmException {
         String tohash = currentUser.getId() + currentUser.getEmail() + currentUser.getLogin();
@@ -372,32 +295,26 @@ public class Model {
     }
 
     public static boolean verifyLicense(File file) throws SQLException, IOException {
-        UpdateUser();
-        String licenseKey = getLicenseJSON(file);
-        System.out.println("your key :" + licenseKey);
+        updateUser();
+        String licenseKey = getLicenseFromJSON(file);
         if(licenseKey == null)
             return false;
 
             return licenseKey.equals(currentUser.getLicense());
     }
 
-    private static String getLicenseJSON(File file){
+    private static String getLicenseFromJSON(File file) throws FileNotFoundException{
         String path = currentUser.getLogin() + ".json";
         if(file != null)
             path = file.getPath();
-
+            
         JSONParser jsonParser = new JSONParser();
         String licenseKey = "";
         try {
             JSONObject licenseKeyJSON = (JSONObject) jsonParser.parse(new FileReader(path));
              licenseKey = (String) licenseKeyJSON.get("key");
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (IOException|ParseException e) {
+            System.out.println("Cannot find license near app, please try add license manually");
         }
 
         return licenseKey;
