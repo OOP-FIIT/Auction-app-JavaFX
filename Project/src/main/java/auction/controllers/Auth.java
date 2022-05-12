@@ -180,7 +180,7 @@ public class Auth {
     private void switchToMenu(String mode, int userID) throws IOException, SQLException {
         Model.setUSER_ID(userID);
         if (mode.equals(Const.SQL.USER_MODE_PRO)) {
-            if (Model.verifyLicense())
+            if (Model.verifyLicense(null))
                 App.changeScene(Const.FXML.AUCTION_SCENE, new User());
             else
                 App.changeScene(Const.FXML.AUCTION_SCENE, new Seller());

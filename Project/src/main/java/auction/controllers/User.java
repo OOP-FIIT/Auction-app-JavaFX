@@ -1,5 +1,6 @@
 package auction.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
@@ -8,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import auction.App;
 import auction.Model;
 import auction.exception.BidException;
 import auction.shared.Const;
@@ -37,6 +39,8 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class User implements Handler{
     @FXML
@@ -57,6 +61,8 @@ public class User implements Handler{
     private Label user_login_text;
     @FXML
     private Label currentVersionLable;
+    @FXML
+    private Label haveProLable;
     @FXML
     private GridPane Menu_grid;
     @FXML
@@ -278,6 +284,7 @@ public class User implements Handler{
         Handler.super.signOutHandle(ke);
     }
 
+    //RTTI implmentation
     public void setProBanner(){
         if(this.getClass() == (new Buyer()).getClass())
             currentVersionLable.setText("Buyer");
@@ -293,4 +300,16 @@ public class User implements Handler{
     public void buyPro() throws NoSuchAlgorithmException, SQLException, IOException{
         Model.setLicenseKey();
     }
+
+    public void iHavePro() throws SQLException, IOException{
+        FileChooser fileChooser = new FileChooser();
+        File licenseFile = fileChooser.showOpenDialog(new Stage());
+        if(Model.verifyLicense(licenseFile)){
+            App.changeScene(Const.FXML.AUCTION_SCENE, new User());
+        }
+        else{
+            haveProLable.setText("Sorry, but we cannot verify this license, try another one, that maches your account");
+        }
+    }
+
 }

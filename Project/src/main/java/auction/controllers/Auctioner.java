@@ -1,16 +1,12 @@
 package auction.controllers;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
-import auction.shared.Const;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 public class Auctioner extends User {
@@ -32,7 +28,7 @@ public class Auctioner extends User {
         scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
         
         PrintLots();
-        Platform.runLater(() -> add_lot_input.requestFocus());
+        Platform.runLater(add_lot_input::requestFocus);
         UpdateUserData();
         setProBanner();
 

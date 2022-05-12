@@ -1,5 +1,6 @@
 package auction;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -370,9 +371,9 @@ public class Model {
         return hexString.toString();
     }
 
-    public static boolean verifyLicense() throws SQLException, IOException {
+    public static boolean verifyLicense(File file) throws SQLException, IOException {
         UpdateUser();
-        String licenseKey = getLicenseJSON();
+        String licenseKey = getLicenseJSON(file);
         System.out.println("your key :" + licenseKey);
         if(licenseKey == null)
             return false;
@@ -380,11 +381,15 @@ public class Model {
             return licenseKey.equals(currentUser.getLicense());
     }
 
-    private static String getLicenseJSON(){
+    private static String getLicenseJSON(File file){
+        String path = "license.json";
+        if(file != null)
+            path = file.getPath();
+
         JSONParser jsonParser = new JSONParser();
         String licenseKey = "";
         try {
-            JSONObject licenseKeyJSON = (JSONObject) jsonParser.parse(new FileReader("license.json"));
+            JSONObject licenseKeyJSON = (JSONObject) jsonParser.parse(new FileReader(path));
              licenseKey = (String) licenseKeyJSON.get("key");
 
         } catch (FileNotFoundException e) {
