@@ -13,8 +13,8 @@ public class Buyer extends User{
 
     @Override
     public void initialize() throws SQLException {
+        add_lot_input.setPromptText("Try PRO version to use this");
         add_lot_input.setDisable(true);
-        add_lot_text.setText("Try PRO version to use this)");
         end_lot_auction.setDisable(true);
         Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
