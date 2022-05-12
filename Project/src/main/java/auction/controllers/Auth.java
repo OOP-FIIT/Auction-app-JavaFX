@@ -64,8 +64,8 @@ public class Auth {
     private void checkPassword(String login, String password) throws SQLException, IOException {
         if (signInMode) {
             int userID = SQL.IsPaaswordCorrect(login, password);
-            Model.setUSER_ID(userID);
-            Model.UpdateUser();
+            Model.setUserId(userID);
+            Model.updateUser();
             String mode = Model.getUSER().getMode();
             if (userID != 0)
                 switchToMenu(mode, userID);
@@ -178,7 +178,7 @@ public class Auth {
     }
 
     private void switchToMenu(String mode, int userID) throws IOException, SQLException {
-        Model.setUSER_ID(userID);
+        Model.setUserId(userID);
         if (mode.equals(Const.SQL.USER_MODE_PRO)) {
             if (Model.verifyLicense(null))
                 App.changeScene(Const.FXML.AUCTION_SCENE, new User());

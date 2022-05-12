@@ -221,7 +221,7 @@ public class User implements Handler{
     }
 
     protected void UpdateUserData() throws SQLException {
-        Model.UpdateUser();
+        Model.updateUser();
         userBalance_text.setText("Balance: " + String.valueOf(Model.getUSER().getBalance()));
         user_login_text.setText(Model.getUSER().getLogin());
     }
