@@ -16,7 +16,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 import auction.App;
-import auction.Model;
+import auction.Auction;
 import auction.shared.Const;
 import auction.sql.SQL;
 
@@ -64,9 +64,9 @@ public class Auth {
     private void checkPassword(String login, String password) throws SQLException, IOException {
         if (signInMode) {
             int userID = SQL.IsPaaswordCorrect(login, password);
-            Model.setUserId(userID);
-            Model.updateUser();
-            String mode = Model.getUSER().getMode();
+            Auction.setUserId(userID);
+            Auction.updateUser();
+            String mode = Auction.getUSER().getMode();
             if (userID != 0)
                 switchToMenu(mode, userID);
             else {
@@ -119,7 +119,7 @@ public class Auth {
 
     private void checkEmail(String email) {
         if (emailMode) {
-            sendActivationMail(email);
+            Auction.sendActivationMail(email);
             emailText.setText("Super, now just put your verification code here");
             emailInput.clear();
             emailMode = false;
@@ -135,52 +135,12 @@ public class Auth {
         }
     }
 
-    private void sendActivationMail(String reciever) {
 
-        Properties properties = System.getProperties();
-        properties.put("mail.smtp.host", Const.MAIL.HOST);
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.enable", "true");
-        properties.put("mail.smtp.auth", "true");
-
-        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(Const.MAIL.LOGIN, Const.MAIL.PASSWORD);
-            }
-        });
-
-        session.setDebug(false);
-
-        try {
-            // Create a default MimeMessage object.
-            MimeMessage message = new MimeMessage(session);
-
-            // Set From: header field of the header.
-            message.setFrom(new InternetAddress(Const.MAIL.LOGIN));
-
-            // Set To: header field of the header.
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
-            rand = new Random();
-            // Set Subject: header field
-            activationCode = rand.nextInt(100000);
-            message.setSubject("Code: " + activationCode);
-
-            message.setText(Const.MAIL.getCodeMessage(activationCode));
-
-            // Send message
-            Transport.send(message);
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
-        }
-
-    }
 
     private void switchToMenu(String mode, int userID) throws IOException, SQLException {
-        Model.setUserId(userID);
+        Auction.setUserId(userID);
         if (mode.equals(Const.SQL.USER_MODE_PRO)) {
-            if (Model.verifyLicense(null))
+            if (Auction.verifyLicense(null))
                 App.changeScene(Const.FXML.AUCTION_SCENE, new User());
             else
                 App.changeScene(Const.FXML.AUCTION_SCENE, new Seller());

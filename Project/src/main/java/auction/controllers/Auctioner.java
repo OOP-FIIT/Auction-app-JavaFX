@@ -21,7 +21,6 @@ public class Auctioner extends User {
         scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
         
         PrintLots();
-        Platform.runLater(add_lot_input::requestFocus);
         UpdateUserData();
         setProBanner();
     }

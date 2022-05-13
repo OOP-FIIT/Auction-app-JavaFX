@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import auction.App;
-import auction.Model;
+import auction.Auction;
 import auction.exception.BidException;
 import auction.shared.Const;
 import auction.sql.SQL;
@@ -72,8 +72,8 @@ public class User implements Handler{
     @FXML
     protected Button end_lot_auction;
 
-    private final String LOT_BG_COLOR = "TEAL";
-    private final String CHECKED_LOT_BG_COLOR = "MEDIUMSPRINGGREEN";
+    private static final String LOT_BG_COLOR = "TEAL";
+    private static final String CHECKED_LOT_BG_COLOR = "MEDIUMSPRINGGREEN";
 
     private boolean lotIsChecked = false;
     private int lotCheckedID = -1;
@@ -88,7 +88,7 @@ public class User implements Handler{
         Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
         PrintLots();
-        Platform.runLater(() -> add_lot_input.requestFocus());
+        Platform.runLater(add_lot_input::requestFocus);
         UpdateUserData();
         add_bid_input.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -130,7 +130,7 @@ public class User implements Handler{
 
         addLotStatus++;
 
-        Platform.runLater(() -> add_lot_input.requestFocus());
+        Platform.runLater(add_lot_input::requestFocus);
     }
 
     private void AddLot_Description(String input) throws SQLException {
@@ -142,7 +142,7 @@ public class User implements Handler{
         SimpleDateFormat DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date datenow = new Date();
         String date = DATETIME.format(datenow);
-        SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date, Model.getUserId());
+        SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date, Auction.getUserId());
         PrintLots();
     }
 
@@ -190,7 +190,7 @@ public class User implements Handler{
         Lot_template.setBorder(new Border(
                 new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
 
-        Lot_template.setOnMouseClicked((event) -> {
+        Lot_template.setOnMouseClicked(event -> {
             //Check
             if (!lotIsChecked) {
                 // Save SQL id, FXML id, status
@@ -205,7 +205,7 @@ public class User implements Handler{
                 Lot_template.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
             }//Check other Lot 
             else {
-                Model.setEndAuctionFirstClick(false);
+                Auction.setEndAuctionFirstClick(false);
                 lotChecked.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
                 lotCheckedID = Integer.parseInt(Lot_template.getId());
                 lotChecked = Lot_template;
@@ -221,9 +221,9 @@ public class User implements Handler{
     }
 
     protected void UpdateUserData() throws SQLException {
-        Model.updateUser();
-        userBalance_text.setText("Balance: " + String.valueOf(Model.getUSER().getBalance()));
-        user_login_text.setText(Model.getUSER().getLogin());
+        Auction.updateUser();
+        userBalance_text.setText("Balance: " + String.valueOf(Auction.getUSER().getBalance()));
+        user_login_text.setText(Auction.getUSER().getLogin());
     }
     
     
@@ -250,7 +250,7 @@ public class User implements Handler{
         if (ke.getCode().equals(KeyCode.ENTER) && lotCheckedID != -1) {
             boolean res = false;
             try { 
-                res = Model.tryAddBid((add_bid_input.getText()), lotCheckedID);
+                res = Auction.tryAddBid((add_bid_input.getText()), lotCheckedID);
             }catch(BidException e){
                 System.out.println(e);
             }
@@ -270,8 +270,8 @@ public class User implements Handler{
 
     public void endAuction() throws SQLException{
         if(lotCheckedID != -1){
-            Model.endAuction(lotCheckedID);
-            if(!Model.isEndAuctionFirstClick()){
+            Auction.endAuction(lotCheckedID);
+            if(!Auction.isEndAuctionFirstClick()){
                 PrintLots();
                 UpdateUserData();
             }
@@ -298,13 +298,13 @@ public class User implements Handler{
     }
 
     public void buyPro() throws NoSuchAlgorithmException, SQLException, IOException{
-        Model.setLicenseKey();
+        Auction.setLicenseKey();
     }
 
     public void iHavePro() throws SQLException, IOException{
         FileChooser fileChooser = new FileChooser();
         File licenseFile = fileChooser.showOpenDialog(new Stage());
-        if(Model.verifyLicense(licenseFile)){
+        if(Auction.verifyLicense(licenseFile)){
             App.changeScene(Const.FXML.AUCTION_SCENE, new User());
         }
         else{

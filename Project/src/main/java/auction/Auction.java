@@ -11,6 +11,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
+import java.util.Random;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -23,114 +33,11 @@ import auction.sql.SQL;
 import auction.threads.SendLicenseEmail;
 import auction.threads.UpdateLicense;
 
-public class Model {
+public class Auction extends AbstractModel{
     private static int userId = 0;
     private static UserData currentUser;
+
     private static boolean endAuctionFirstClick = false;
-
-    public static class UserData {
-        private int id;
-        private String login;
-        private String email;
-        private int balance;
-        private String mode;
-        private String license;
-
-        public UserData(int userId) throws SQLException {
-            ResultSet res = SQL.SELECT_UserData(userId);
-            res.next();
-            this.login = res.getString(Const.SQL.USERDATA_LOGIN);
-            this.balance = res.getInt(Const.SQL.USERDATA_BALANCE);
-            this.email = res.getString(Const.SQL.USERDATA_EMAIL);
-            this.mode = res.getString(Const.SQL.USERDATA_MODE);
-            this.license = res.getString(Const.SQL.USERDATA_LICENSE);
-            this.id = userId;
-        }
-
-        /**
-         * @return the id
-         */
-        public int getId() {
-            return id;
-        }
-
-        /**
-         * @param id the id to set
-         */
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        /**
-         * @return the login
-         */
-        public String getLogin() {
-            return login;
-        }
-
-        /**
-         * @param login the login to set
-         */
-        public void setLogin(String login) {
-            this.login = login;
-        }
-
-        /**
-         * @return the email
-         */
-        public String getEmail() {
-            return email;
-        }
-
-        /**
-         * @param email the email to set
-         */
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        /**
-         * @return the balance
-         */
-        public int getBalance() {
-            return balance;
-        }
-
-        /**
-         * @param balance the balance to set
-         */
-        public void setBalance(int balance) {
-            this.balance = balance;
-        }
-
-        /**
-         * @return the mode
-         */
-        public String getMode() {
-            return mode;
-        }
-
-        /**
-         * @param mode the mode to set
-         */
-        public void setMode(String mode) {
-            this.mode = mode;
-        }
-
-        /**
-         * @return the license
-         */
-        public String getLicense() {
-            return license;
-        }
-
-        /**
-         * @param license the license to set
-         */
-        public void setLicense(String license) {
-            this.license = license;
-        }
-    }
 
     public static boolean tryAddBid(String bidStr, int lotId) throws SQLException, BidException {
         if (bidStr.equals("")) {
@@ -225,16 +132,10 @@ public class Model {
         return currentUser;
     }
 
-    /**
-     * @param uSER the uSER to set
-     */
-    public static void setUSER(UserData uSER) {
-        currentUser = uSER;
-    }
-
     public static void updateUser() throws SQLException {
         setUSER(new UserData(userId));
     }
+
 
     /**
      * @return the uSER_ID
@@ -273,7 +174,6 @@ public class Model {
         updateLicense.start();
         App.changeScene(Const.FXML.AUCTION_SCENE, new User());
     }
-
 
     private static String generateLicenseKey() throws NoSuchAlgorithmException {
         String tohash = currentUser.getId() + currentUser.getEmail() + currentUser.getLogin();
@@ -320,5 +220,45 @@ public class Model {
         return licenseKey;
     }
 
+    public static void sendActivationMail(String reciever) {
 
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", Const.MAIL.HOST);
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(Const.MAIL.LOGIN, Const.MAIL.PASSWORD);
+            }
+        });
+
+        session.setDebug(false);
+
+        try {
+            // Create a default MimeMessage object.
+            MimeMessage message = new MimeMessage(session);
+
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(Const.MAIL.LOGIN));
+
+            // Set To: header field of the header.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
+            Random rand = new Random();
+            // Set Subject: header field
+            int activationCode = rand.nextInt(100000);
+            message.setSubject("Code: " + activationCode);
+
+            message.setText(Const.MAIL.getCodeMessage(activationCode));
+
+            // Send message
+            Transport.send(message);
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+
+    }
 }

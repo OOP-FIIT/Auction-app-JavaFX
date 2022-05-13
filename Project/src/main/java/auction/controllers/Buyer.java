@@ -19,7 +19,7 @@ public class Buyer extends User{
         Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
         PrintLots();
-        Platform.runLater(() -> add_lot_input.requestFocus());
+        Platform.runLater(add_bid_input::requestFocus);
         UpdateUserData();
         setProBanner();
 
