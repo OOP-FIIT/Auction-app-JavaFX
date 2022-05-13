@@ -9,16 +9,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="mainScene" alignment="CENTER" cache="true" cacheHint="SPEED" focusTraversable="true" gridLinesVisible="true" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" snapToPixel="false" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.controllers.Auth">
+<GridPane fx:id="mainScene" alignment="CENTER" cache="true" cacheHint="SPEED" focusTraversable="true" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" onKeyPressed="#signOutEscHandle" prefHeight="400.0" prefWidth="600.0" snapToPixel="false" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="auction.controllers.Authentication">
   <columnConstraints>
       <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="ALWAYS" minWidth="-Infinity" />
   </columnConstraints>
   <rowConstraints>
       <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" percentHeight="30.0" prefHeight="100.40001831054687" valignment="CENTER" vgrow="ALWAYS" />
       <RowConstraints maxHeight="96.76092529296875" minHeight="0.0" prefHeight="21.360931396484375" valignment="CENTER" vgrow="ALWAYS" />
-    <RowConstraints maxHeight="1.7976931348623157E308" minHeight="2.2000762939452727" prefHeight="39.80005187988277" valignment="CENTER" vgrow="ALWAYS" />
-      <RowConstraints maxHeight="50.0" minHeight="0.0" prefHeight="20.199981689453125" valignment="TOP" vgrow="ALWAYS" />
-      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="30.80002136230462" valignment="CENTER" vgrow="ALWAYS" />
+    <RowConstraints maxHeight="1.7976931348623157E308" minHeight="2.2000762939452727" prefHeight="38.80005187988277" valignment="CENTER" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="50.0" minHeight="0.0" prefHeight="15.199981689453125" valignment="TOP" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="20.80002136230462" valignment="CENTER" vgrow="ALWAYS" />
       <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="18.39999694824212" valignment="CENTER" vgrow="ALWAYS" />
       <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="46.60003662109375" valignment="CENTER" vgrow="ALWAYS" />
       <RowConstraints maxHeight="1.7976931348623157E308" minHeight="56.80000610351567" percentHeight="30.0" prefHeight="99.19998779296873" valignment="CENTER" vgrow="ALWAYS" />
@@ -56,7 +56,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button alignment="TOP_CENTER" contentDisplay="TOP" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#sellerModeHandle" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: darkblue;" text="Seller" textAlignment="CENTER" textFill="#ff00d0" textOverrun="CLIP" wrapText="true" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+            <Button alignment="TOP_CENTER" contentDisplay="TOP" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#sellerModeButtonHandle" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: darkblue;" text="Seller" textAlignment="CENTER" textFill="#ff00d0" textOverrun="CLIP" wrapText="true" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <font>
                   <Font size="18.0" />
                </font>
@@ -64,12 +64,12 @@
                   <Insets />
                </GridPane.margin>
             </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#buyerModeHandle" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: darkblue;" text="Buyer" textAlignment="CENTER" textFill="#00d0ff" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#buyerModeButtonHandle" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: darkblue;" text="Buyer" textAlignment="CENTER" textFill="#00d0ff" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#auctionerModeHandle" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: darkblue;" text="Auctioner" textFill="#95ff00" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#auctionerModeButtonHandle" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: darkblue;" text="Auctioner" textFill="#95ff00" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font size="18.0" />
                </font>

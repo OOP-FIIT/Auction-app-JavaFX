@@ -3,8 +3,8 @@ package auction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import auction.dataBase.SQL;
 import auction.shared.Const;
-import auction.sql.SQL;
 
 /**
  * Model of Auction that can be used to implement own Auction type

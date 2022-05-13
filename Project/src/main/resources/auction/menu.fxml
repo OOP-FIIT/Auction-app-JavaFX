@@ -114,7 +114,7 @@
             </GridPane>
          </children>
       </GridPane>
-      <TextField fx:id="addLotInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#AddLot_handle" prefHeight="31.0" prefWidth="555.0" style="-fx-background-color: darkgreen;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+      <TextField fx:id="addLotInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#addLotInputHandle" prefHeight="31.0" prefWidth="555.0" style="-fx-background-color: darkgreen;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
          <GridPane.margin>
             <Insets top="20.0" />
          </GridPane.margin>

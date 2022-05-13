@@ -2,7 +2,7 @@ package auction.threads;
 
 import java.sql.SQLException;
 
-import auction.sql.SQL;
+import auction.dataBase.SQL;
 
 public class UpdateLicense extends Thread{
     private String licenseKey;

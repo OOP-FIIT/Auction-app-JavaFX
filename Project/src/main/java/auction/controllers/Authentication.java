@@ -17,13 +17,13 @@ import javax.mail.internet.*;
 
 import auction.App;
 import auction.Auction;
+import auction.dataBase.SQL;
 import auction.shared.Const;
-import auction.sql.SQL;
 
 /**
  * Controller of Sign in/on window
  */
-public class Auth {
+public class Authentication implements Handler {
     @FXML
     private TextField loginInput;
     @FXML
@@ -57,6 +57,7 @@ public class Auth {
     /**
      * Starts Sign In if login is exists
      * Starts Sign On if login is new
+     * 
      * @param login
      * @throws IOException
      * @throws SQLException
@@ -72,8 +73,9 @@ public class Auth {
     }
 
     /**
-     * Checks password for Sign In and Sign On 
+     * Checks password for Sign In and Sign On
      * Calls nex function if password is correct
+     * 
      * @param login
      * @param password
      * @throws SQLException
@@ -130,6 +132,7 @@ public class Auth {
 
     /**
      * Starts Sign Up process
+     * 
      * @param login
      */
     private void signUp(String login) {
@@ -145,11 +148,12 @@ public class Auth {
     /**
      * Checks email, then sends activation mail
      * When email sended, check activation code
+     * 
      * @param email
      */
     private void checkEmail(String email) {
         if (emailMode) {
-            Auction.sendActivationMail(email);
+            activationCode = Auction.sendActivationMail(email);
             emailText.setText("Super, now just put your verification code here");
             emailInput.clear();
             emailMode = false;
@@ -157,6 +161,7 @@ public class Auth {
             rand = new Random();
             randomBalance = rand.nextInt(100000);
         } else {
+            System.out.println(activationCode);
             if (Integer.parseInt(email) == activationCode) {
                 emailText.setText("Excellent, last thing to do - choose yours account mode");
                 userModeGrid.setVisible(true);
@@ -165,10 +170,11 @@ public class Auth {
         }
     }
 
-
     /**
      * Swithes window to new
-     * @param mode sets access permissions to Auction [PRO, SELLER, BUYER, AUCTIONER] 
+     * 
+     * @param mode   sets access permissions to Auction [PRO, SELLER, BUYER,
+     *               AUCTIONER]
      * @param userID user`s ID in DataBase
      * @throws IOException
      * @throws SQLException
@@ -191,24 +197,27 @@ public class Auth {
 
     }
 
-
-    // HANDLERS ---------------------------------------------------------------------------------------
+    // HANDLERS
+    // ---------------------------------------------------------------------------------------
     /**
      * Creates new user in DataBase and swithes to BUYER mode
+     * 
      * @throws SQLException
      * @throws IOException
      */
-    public void buyerModeHandle() throws SQLException, IOException {
-        int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_BUYER, randomBalance);
+    public void buyerModeButtonHandle() throws SQLException, IOException {
+        int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_BUYER,
+                randomBalance);
         switchToMenu(Const.SQL.USER_MODE_PRO, userID);
     }
 
     /**
      * Creates new user in DataBase and swithes to SELLER mode
+     * 
      * @throws SQLException
      * @throws IOException
      */
-    public void sellerModeHandle() throws SQLException, IOException {
+    public void sellerModeButtonHandle() throws SQLException, IOException {
         int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_SELLER,
                 randomBalance);
         switchToMenu(Const.SQL.USER_MODE_SELLER, userID);
@@ -216,10 +225,11 @@ public class Auth {
 
     /**
      * Creates new user in DataBase and swithes to AUCTIONER mode
+     * 
      * @throws SQLException
      * @throws IOException
      */
-    public void auctionerModeHandle() throws SQLException, IOException {
+    public void auctionerModeButtonHandle() throws SQLException, IOException {
         int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_AUCTIONER,
                 randomBalance);
         switchToMenu(Const.SQL.USER_MODE_PRO, userID);
@@ -227,6 +237,7 @@ public class Auth {
 
     /**
      * Starts checkLogin() if ENTER pressed in login input
+     * 
      * @param ke
      * @throws SQLException
      * @throws IOException
@@ -240,6 +251,7 @@ public class Auth {
 
     /**
      * Starts checkPassword() if ENTER pressed in password input
+     * 
      * @param ke
      * @throws SQLException
      * @throws IOException
@@ -254,6 +266,7 @@ public class Auth {
 
     /**
      * Starts checkEmail() if ENTER pressed on email input
+     * 
      * @param ke
      */
     public void emailInputHande(KeyEvent ke) {
@@ -261,6 +274,11 @@ public class Auth {
             String email = emailInput.getText();
             checkEmail(email);
         }
+    }
+
+    public void signOutEscHandle(KeyEvent ke) throws IOException {
+        // Default method inplementation
+        Handler.super.signOutHandle(ke);
     }
 
 }

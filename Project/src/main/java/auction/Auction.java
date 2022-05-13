@@ -27,18 +27,19 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import auction.controllers.User;
+import auction.dataBase.SQL;
 import auction.exception.BidException;
+import auction.interfaces.License;
 import auction.shared.Const;
-import auction.sql.SQL;
 import auction.threads.SendLicenseEmail;
 import auction.threads.UpdateLicense;
 
 public class Auction extends AbstractModel{
     private static int userId = 0;
     private static UserData currentUser;
-
     private static boolean endAuctionFirstClick = false;
 
+    static License message;
     public static boolean tryAddBid(String bidStr, int lotId) throws SQLException, BidException {
         if (bidStr.equals("")) {
             throw new BidException("You cannot add [EMPTY] bid");
@@ -191,12 +192,27 @@ public class Auction extends AbstractModel{
      * @throws NoSuchAlgorithmException
      */
     private static String generateLicenseKey() throws NoSuchAlgorithmException {
-        String tohash = currentUser.getId() + currentUser.getEmail() + currentUser.getLogin();
+        setEncryprionMessage();
+        String tohash = message.encryprionMessage(String.valueOf(currentUser.getId()), currentUser.getEmail(), currentUser.getLogin());
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedhash = digest.digest(tohash.getBytes(StandardCharsets.UTF_8));
         return bytesToHex(encodedhash);
     }
 
+    /**
+     * Here we specify how our message will be created
+     * message is a text, that will be hashed and set as License
+     * so it is importand to set some algorithm that combines some parts ow information and returns message
+     * 
+     * right now here I have used simple concatenation, but it could also be like: 
+     * arg1 + arg1.lenght()/2 + arg2.substring(3) + arg3.charAt(10);
+     */
+    private static void setEncryprionMessage(){
+        message = (arg1, arg2, arg3)-> {
+            return arg1 + arg2 + arg3;
+        };
+    }
+    
     /**
      * Returns String from byte[] hash 
      * @param hash
@@ -211,6 +227,7 @@ public class Auction extends AbstractModel{
             }
             hexString.append(hex);
         }
+
         return hexString.toString();
     }
 
@@ -257,8 +274,8 @@ public class Auction extends AbstractModel{
      * Sends email to new PRO version owner with licenseKey.JSON file
      * @param reciever
      */
-    public static void sendActivationMail(String reciever) {
-
+    public static int sendActivationMail(String reciever) {
+        int activationCode = -1;
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", Const.MAIL.HOST);
         properties.put("mail.smtp.port", "465");
@@ -286,7 +303,7 @@ public class Auction extends AbstractModel{
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
             Random rand = new Random();
             // Set Subject: header field
-            int activationCode = rand.nextInt(100000);
+            activationCode = rand.nextInt(100000);
             message.setSubject("Code: " + activationCode);
 
             message.setText(Const.MAIL.getCodeMessage(activationCode));
@@ -296,6 +313,6 @@ public class Auction extends AbstractModel{
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }
-
+        return activationCode;
     }
 }

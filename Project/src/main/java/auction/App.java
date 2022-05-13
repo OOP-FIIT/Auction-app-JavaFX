@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import auction.controllers.User;
+import auction.dataBase.SQL;
 import auction.shared.Const;
-import auction.sql.SQL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

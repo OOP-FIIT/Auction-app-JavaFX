@@ -1,4 +1,4 @@
-package auction.sql;
+package auction.dataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -116,22 +116,24 @@ public class SQL {
    public static int InsertUser(String login, String password, String email, String mode, int balance) throws SQLException {
       Statement stmt = conn.createStatement();
       String sql = "INSERT INTO " + Const.SQL.USERDATA + " (" + 
-                                       Const.SQL.USERDATA_LOGIN + ", " + 
+                                       Const.SQL.USERDATA_LOGIN    + ", " + 
                                        Const.SQL.USERDATA_PASSWORD + ", " + 
-                                       Const.SQL.USERDATA_MODE + ", " + 
-                                       Const.SQL.USERDATA_BALANCE + ") " + 
+                                       Const.SQL.USERDATA_EMAIL    + ", " + 
+                                       Const.SQL.USERDATA_MODE     + ", " + 
+                                       Const.SQL.USERDATA_BALANCE  + ") " + 
                                        "VALUES('" + 
                                                 login    + "' , '" + 
                                                 password + "' , '" + 
-                                                email    + "', '"  + 
+                                                email    + "' , '"  + 
                                                 mode     + "', "   + 
                                                 balance  + 
                                                 ");";
       
+                                                System.out.println(sql);
       stmt.executeUpdate(sql);
 
       
-      sql = "SELECT id FROM " + Const.SQL.USERDATA + "WHERE " + Const.SQL.USERDATA_LOGIN + "='" + login +"';";
+      sql = "SELECT id FROM " + Const.SQL.USERDATA + " WHERE " + Const.SQL.USERDATA_LOGIN + "='" + login +"';";
       ResultSet result = stmt.executeQuery(sql);
       result.next();
       return Integer.parseInt(result.getString(Const.SQL.USERDATA_ID));

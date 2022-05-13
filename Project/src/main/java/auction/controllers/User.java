@@ -11,9 +11,9 @@ import java.util.Date;
 
 import auction.App;
 import auction.Auction;
+import auction.dataBase.SQL;
 import auction.exception.BidException;
 import auction.shared.Const;
-import auction.sql.SQL;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -108,7 +108,7 @@ public class User implements Handler {
     /**
      * Shows custom banner depends on user`s mode
      */
-    public void setProBanner() {
+    protected void setProBanner() {
         // RTTI implmentation
         if (this.getClass() == (new Buyer()).getClass())
             currentVersionLable.setText("Buyer");
