@@ -42,15 +42,18 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class User implements Handler{
+/**
+ * Controller of PRO mode
+ */
+public class User implements Handler {
     @FXML
     protected ScrollPane scroll_lots;
     @FXML
     protected VBox Vbox_lots;
     @FXML
-    protected TextField add_lot_input;
+    protected TextField addLotInput;
     @FXML
-    protected TextField add_bid_input;
+    protected TextField addBidInput;
     @FXML
     protected Text add_lot_text;
     @FXML
@@ -70,7 +73,7 @@ public class User implements Handler{
     @FXML
     protected GridPane proBannerGrid;
     @FXML
-    protected Button end_lot_auction;
+    protected Button endAuctionButton;
 
     private static final String LOT_BG_COLOR = "TEAL";
     private static final String CHECKED_LOT_BG_COLOR = "MEDIUMSPRINGGREEN";
@@ -83,26 +86,46 @@ public class User implements Handler{
     private String LOT_NAME = "";
     private String LOT_DESCRIPTION = "";
 
-
     public void initialize() throws SQLException {
         Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
-        PrintLots();
-        Platform.runLater(add_lot_input::requestFocus);
-        UpdateUserData();
-        add_bid_input.textProperty().addListener(new ChangeListener<String>() {
+        printLots();
+        Platform.runLater(addLotInput::requestFocus);
+        updateUserData();
+        addBidInput.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
                     String newValue) {
                 if (!newValue.matches("\\d*")) {
-                    add_bid_input.setText(newValue.replaceAll("[^\\d]", ""));
+                    addBidInput.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
 
     }
 
-    protected void PrintLots() throws SQLException {
+        
+    /**
+     * Shows custom banner depends on user`s mode
+     */
+    public void setProBanner() {
+        // RTTI implmentation
+        if (this.getClass() == (new Buyer()).getClass())
+            currentVersionLable.setText("Buyer");
+        if (this.getClass() == (new Auctioner()).getClass())
+            currentVersionLable.setText("Auctioner");
+        if (this.getClass() == (new Seller()).getClass())
+            currentVersionLable.setText("Sellers");
+
+        proBannerGrid.setVisible(true);
+
+    }
+    
+    /**
+     * Prints every lot that is stored in DataBase 
+     * @throws SQLException
+     */
+    protected void printLots() throws SQLException {
         Vbox_lots.getChildren().clear();
 
         ResultSet lot = SQL.SELECT_Lots();
@@ -123,19 +146,32 @@ public class User implements Handler{
 
     }
 
-    private void AddLot_Name(String name) throws ParseException {
+    /**
+     * Saves name of Lot
+     * and swithes to addLotDescription mode
+     * @param name
+     * @throws ParseException
+     */
+    private void addLotName(String name) throws ParseException {
         LOT_NAME = name;
-        add_lot_input.setText("");
+        addLotInput.setText("");
         add_lot_text.setText("Add some beautiful description");
 
         addLotStatus++;
 
-        Platform.runLater(add_lot_input::requestFocus);
+        Platform.runLater(addLotInput::requestFocus);
     }
 
-    private void AddLot_Description(String input) throws SQLException {
+    /**
+     * Saves description
+     * then push it in DataBase
+     * then updates Lot view 
+     * @param input
+     * @throws SQLException
+     */
+    private void addLotDescription(String input) throws SQLException {
         LOT_DESCRIPTION = input;
-        add_lot_input.setText("");
+        addLotInput.setText("");
         add_lot_text.setText("Name your lot:");
         addLotStatus = 1;
 
@@ -143,9 +179,18 @@ public class User implements Handler{
         Date datenow = new Date();
         String date = DATETIME.format(datenow);
         SQL.InsertLot(LOT_NAME, LOT_DESCRIPTION, date, Auction.getUserId());
-        PrintLots();
+        printLots();
     }
 
+    /**
+     * Returns FXML GridPane with all info in arguments
+     * @param name
+     * @param date
+     * @param description
+     * @param seller
+     * @param id
+     * @return
+     */
     private GridPane getLotGrid(String name, String date, String description, String seller, String id) {
         Label Lot_name = new Label(name);
         Label Lot_date = new Label(date);
@@ -191,19 +236,19 @@ public class User implements Handler{
                 new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
 
         Lot_template.setOnMouseClicked(event -> {
-            //Check
+            // Check
             if (!lotIsChecked) {
                 // Save SQL id, FXML id, status
                 lotIsChecked = true;
                 lotCheckedID = Integer.parseInt(Lot_template.getId());
                 lotChecked = Lot_template;
                 Lot_template.setStyle("-fx-background-color: " + CHECKED_LOT_BG_COLOR + ";");
-            }//UNcheck 
+            } // UNcheck
             else if (lotCheckedID == Integer.parseInt(Lot_template.getId())) {
                 lotIsChecked = false;
                 lotCheckedID = -1;
                 Lot_template.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
-            }//Check other Lot 
+            } // Check other Lot
             else {
                 Auction.setEndAuctionFirstClick(false);
                 lotChecked.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
@@ -220,94 +265,83 @@ public class User implements Handler{
 
     }
 
-    protected void UpdateUserData() throws SQLException {
+    /**
+     * Updates UserData with new frim SQL
+     * @throws SQLException
+     */
+    protected void updateUserData() throws SQLException {
         Auction.updateUser();
         userBalance_text.setText("Balance: " + String.valueOf(Auction.getUSER().getBalance()));
         user_login_text.setText(Auction.getUSER().getLogin());
     }
-    
-    
+
     // Handlers-------------------------------
 
-    public void AddLot_handle(KeyEvent ke) throws ParseException, SQLException, IOException {
+    public void addLotInputHandle(KeyEvent ke) throws ParseException, SQLException, IOException {
         String input = "";
         if (ke.getCode().equals(KeyCode.ENTER)) {
-            input = add_lot_input.getText();
+            input = addLotInput.getText();
 
             switch (addLotStatus) {
                 case 1:
-                    AddLot_Name(input);
+                    addLotName(input);
                     break;
                 case 2:
-                    AddLot_Description(input);
+                    addLotDescription(input);
                     break;
             }
 
         }
     }
 
-    public void addBid_handle(KeyEvent ke) throws ParseException, SQLException, IOException{
+    public void addBidInputHandle(KeyEvent ke) throws ParseException, SQLException, IOException {
         if (ke.getCode().equals(KeyCode.ENTER) && lotCheckedID != -1) {
             boolean res = false;
-            try { 
-                res = Auction.tryAddBid((add_bid_input.getText()), lotCheckedID);
-            }catch(BidException e){
+            try {
+                res = Auction.tryAddBid((addBidInput.getText()), lotCheckedID);
+            } catch (BidException e) {
                 System.out.println(e);
             }
-            
-            if(res){
-                System.out.println("You have successfully added ew bid(" + add_bid_input.getText() + ") to lot: " + lotCheckedID);
-                add_bid_input.setText("");
+
+            if (res) {
+                System.out.println(
+                        "You have successfully added ew bid(" + addBidInput.getText() + ") to lot: " + lotCheckedID);
+                addBidInput.setText("");
                 add_bid_text.setText("Success!");
-                UpdateUserData();
-            }
-            else{
-                add_bid_input.setText("");
+                updateUserData();
+            } else {
+                addBidInput.setText("");
                 add_bid_text.setText("Your balance and your bid don`t love each other");
             }
-    }
+        }
     }
 
-    public void endAuction() throws SQLException{
-        if(lotCheckedID != -1){
+    public void endAuctionButtonHandle() throws SQLException {
+        if (lotCheckedID != -1) {
             Auction.endAuction(lotCheckedID);
-            if(!Auction.isEndAuctionFirstClick()){
-                PrintLots();
-                UpdateUserData();
+            if (!Auction.isEndAuctionFirstClick()) {
+                printLots();
+                updateUserData();
             }
 
         }
     }
-    
-    //Default method inplementation
-    public void signOutHandle(KeyEvent ke) throws IOException {
+
+    public void signOutEscHandle(KeyEvent ke) throws IOException {
+            // Default method inplementation
         Handler.super.signOutHandle(ke);
     }
 
-    //RTTI implmentation
-    public void setProBanner(){
-        if(this.getClass() == (new Buyer()).getClass())
-            currentVersionLable.setText("Buyer");
-        if(this.getClass() == (new Auctioner()).getClass())
-            currentVersionLable.setText("Auctioner");
-        if(this.getClass() == (new Seller()).getClass())
-            currentVersionLable.setText("Sellers");
-        
-        proBannerGrid.setVisible(true);
-
-    }
-
-    public void buyPro() throws NoSuchAlgorithmException, SQLException, IOException{
+    public void buyProButtonHandle() throws NoSuchAlgorithmException, SQLException, IOException {
         Auction.setLicenseKey();
     }
 
-    public void iHavePro() throws SQLException, IOException{
+    public void iHaveProButtonHandle() throws SQLException, IOException {
         FileChooser fileChooser = new FileChooser();
         File licenseFile = fileChooser.showOpenDialog(new Stage());
-        if(Auction.verifyLicense(licenseFile)){
+        if (Auction.verifyLicense(licenseFile)) {
             App.changeScene(Const.FXML.AUCTION_SCENE, new User());
-        }
-        else{
+        } else {
             haveProLable.setText("Sorry, but we cannot verify this license, try another one, that maches your account");
         }
     }

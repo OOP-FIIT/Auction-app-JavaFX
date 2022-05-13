@@ -20,6 +20,9 @@ import auction.Auction;
 import auction.shared.Const;
 import auction.sql.SQL;
 
+/**
+ * Controller of Sign in/on window
+ */
 public class Auth {
     @FXML
     private TextField loginInput;
@@ -51,8 +54,15 @@ public class Auth {
         Platform.runLater(loginInput::requestFocus);
     }
 
+    /**
+     * Starts Sign In if login is exists
+     * Starts Sign On if login is new
+     * @param login
+     * @throws IOException
+     * @throws SQLException
+     */
     private void checkLogin(String login) throws IOException, SQLException {
-        if (SQL.IsLoginExists(login)) {
+        if (SQL.loginExists(login)) {
             signInMode = true;
             signIn();
         } else {
@@ -61,6 +71,14 @@ public class Auth {
         }
     }
 
+    /**
+     * Checks password for Sign In and Sign On 
+     * Calls nex function if password is correct
+     * @param login
+     * @param password
+     * @throws SQLException
+     * @throws IOException
+     */
     private void checkPassword(String login, String password) throws SQLException, IOException {
         if (signInMode) {
             int userID = SQL.IsPaaswordCorrect(login, password);
@@ -101,12 +119,19 @@ public class Auth {
         }
     }
 
+    /**
+     * Starts sign In process
+     */
     private void signIn() {
         passwordText.setVisible(true);
         passwordInput.setVisible(true);
         Platform.runLater(passwordInput::requestFocus);
     }
 
+    /**
+     * Starts Sign Up process
+     * @param login
+     */
     private void signUp(String login) {
         passwordText.setVisible(true);
         passwordInput.setVisible(true);
@@ -117,6 +142,11 @@ public class Auth {
         Platform.runLater(passwordInput::requestFocus);
     }
 
+    /**
+     * Checks email, then sends activation mail
+     * When email sended, check activation code
+     * @param email
+     */
     private void checkEmail(String email) {
         if (emailMode) {
             Auction.sendActivationMail(email);
@@ -136,7 +166,13 @@ public class Auth {
     }
 
 
-
+    /**
+     * Swithes window to new
+     * @param mode sets access permissions to Auction [PRO, SELLER, BUYER, AUCTIONER] 
+     * @param userID user`s ID in DataBase
+     * @throws IOException
+     * @throws SQLException
+     */
     private void switchToMenu(String mode, int userID) throws IOException, SQLException {
         Auction.setUserId(userID);
         if (mode.equals(Const.SQL.USER_MODE_PRO)) {
@@ -155,23 +191,46 @@ public class Auth {
 
     }
 
+
+    // HANDLERS ---------------------------------------------------------------------------------------
+    /**
+     * Creates new user in DataBase and swithes to BUYER mode
+     * @throws SQLException
+     * @throws IOException
+     */
     public void buyerModeHandle() throws SQLException, IOException {
         int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_BUYER, randomBalance);
         switchToMenu(Const.SQL.USER_MODE_PRO, userID);
     }
 
+    /**
+     * Creates new user in DataBase and swithes to SELLER mode
+     * @throws SQLException
+     * @throws IOException
+     */
     public void sellerModeHandle() throws SQLException, IOException {
         int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_SELLER,
                 randomBalance);
         switchToMenu(Const.SQL.USER_MODE_SELLER, userID);
     }
 
+    /**
+     * Creates new user in DataBase and swithes to AUCTIONER mode
+     * @throws SQLException
+     * @throws IOException
+     */
     public void auctionerModeHandle() throws SQLException, IOException {
         int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_AUCTIONER,
                 randomBalance);
         switchToMenu(Const.SQL.USER_MODE_PRO, userID);
     }
 
+    /**
+     * Starts checkLogin() if ENTER pressed in login input
+     * @param ke
+     * @throws SQLException
+     * @throws IOException
+     */
     public void loginInputHandle(KeyEvent ke) throws SQLException, IOException {
         if (ke.getCode().equals(KeyCode.ENTER)) {
             String login = loginInput.getText();
@@ -179,6 +238,12 @@ public class Auth {
         }
     }
 
+    /**
+     * Starts checkPassword() if ENTER pressed in password input
+     * @param ke
+     * @throws SQLException
+     * @throws IOException
+     */
     public void passwordInputHandle(KeyEvent ke) throws SQLException, IOException {
         if (ke.getCode().equals(KeyCode.ENTER)) {
             String login = loginInput.getText();
@@ -187,6 +252,10 @@ public class Auth {
         }
     }
 
+    /**
+     * Starts checkEmail() if ENTER pressed on email input
+     * @param ke
+     */
     public void emailInputHande(KeyEvent ke) {
         if (ke.getCode().equals(KeyCode.ENTER)) {
             String email = emailInput.getText();

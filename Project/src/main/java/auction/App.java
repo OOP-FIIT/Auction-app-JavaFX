@@ -12,11 +12,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-
+/**
+ * Main JavaFXML App
+ */
 public class App extends Application {
-
- 
-    // constructor to put ip address and port
 
     public static Scene scene;
 
@@ -41,7 +40,11 @@ public class App extends Application {
         fxmlLoader.setController(user);;
         scene.setRoot(fxmlLoader.load());
     }
-
+    /**
+     * Start of JavaFXML App, with SQL initialization
+     * @param args
+     * @throws SQLException
+     */
     public static void main(String[] args) throws SQLException {
         SQL.initSql();
         launch();

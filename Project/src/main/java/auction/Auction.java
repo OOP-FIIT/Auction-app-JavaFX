@@ -136,7 +136,9 @@ public class Auction extends AbstractModel{
         setUSER(new UserData(userId));
     }
 
-
+    public static void setUSER(UserData uSER) {
+        currentUser = uSER;
+    }
     /**
      * @return the uSER_ID
      */
@@ -165,6 +167,14 @@ public class Auction extends AbstractModel{
         endAuctionFirstClick = state;
     }
 
+    /**
+     * Creates LicenseKey
+     * Updates DataBase
+     * Switches window to PRO mode
+     * @throws NoSuchAlgorithmException
+     * @throws SQLException
+     * @throws IOException
+     */
     public static void setLicenseKey() throws NoSuchAlgorithmException, SQLException, IOException {
         String licenseKey = generateLicenseKey();
         Thread sendLicenseThread = new SendLicenseEmail(licenseKey, currentUser.getEmail(), currentUser.getLogin());
@@ -175,6 +185,11 @@ public class Auction extends AbstractModel{
         App.changeScene(Const.FXML.AUCTION_SCENE, new User());
     }
 
+    /**
+     * Returns LicenseKey depends on user`s login, id, email
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     private static String generateLicenseKey() throws NoSuchAlgorithmException {
         String tohash = currentUser.getId() + currentUser.getEmail() + currentUser.getLogin();
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -182,6 +197,11 @@ public class Auction extends AbstractModel{
         return bytesToHex(encodedhash);
     }
 
+    /**
+     * Returns String from byte[] hash 
+     * @param hash
+     * @return
+     */
     private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
         for (int i = 0; i < hash.length; i++) {
@@ -194,6 +214,13 @@ public class Auction extends AbstractModel{
         return hexString.toString();
     }
 
+    /**
+     * Return TRUE if license is correct and FALSE if it differs from DataBase`s license
+     * @param file
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
     public static boolean verifyLicense(File file) throws SQLException, IOException {
         updateUser();
         String licenseKey = getLicenseFromJSON(file);
@@ -203,6 +230,12 @@ public class Auction extends AbstractModel{
             return licenseKey.equals(currentUser.getLicense());
     }
 
+    /**
+     * Returns String with LicenseKey from JSON file
+     * @param file - if null then it will search file near the programm
+     * @return
+     * @throws FileNotFoundException
+     */
     private static String getLicenseFromJSON(File file) throws FileNotFoundException{
         String path = currentUser.getLogin() + ".json";
         if(file != null)
@@ -220,6 +253,10 @@ public class Auction extends AbstractModel{
         return licenseKey;
     }
 
+    /**
+     * Sends email to new PRO version owner with licenseKey.JSON file
+     * @param reciever
+     */
     public static void sendActivationMail(String reciever) {
 
         Properties properties = System.getProperties();

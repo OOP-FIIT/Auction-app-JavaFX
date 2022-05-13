@@ -2,26 +2,23 @@ package auction.controllers;
 
 import java.sql.SQLException;
 
-import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
+/**
+ * Controller of SELLER mode
+ */
+public class Seller extends User {
 
-public class Seller extends User{
+    /**
+     * Disables feachures of [Adding Bid] and [Ending Auction]
+     * Adds "BuyPro" Banner
+     */
+    public void initialize() throws SQLException {
+        super.initialize();
 
-        @Override
-        public void initialize() throws SQLException {
-            add_bid_input.setPromptText("You can buy PRO version to use all feachures in one account");
-            add_bid_input.setDisable(true);
-            end_lot_auction.setDisable(true);
-            Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-            scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
-            PrintLots();
-            Platform.runLater(add_lot_input::requestFocus);
-            UpdateUserData();
-            setProBanner();
-        }
+        addBidInput.setPromptText("You can buy PRO version to use all feachures in one account");
+        addBidInput.setDisable(true);
+        endAuctionButton.setDisable(true);
+        proBannerGrid.setVisible(true);
+        setProBanner();
+    }
 
 }

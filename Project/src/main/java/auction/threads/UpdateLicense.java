@@ -13,6 +13,9 @@ public class UpdateLicense extends Thread{
         this.id = id;
     }
 
+    /**
+     * Updates SQL record of users License while App is swithing to PRO and while License email is sending 
+     */
     @Override
     public void run(){
         try {

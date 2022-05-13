@@ -1,5 +1,8 @@
 package auction.shared;
 
+/**
+ * Constants class 
+ */
 public final class Const {
 
     public static final class SQL{

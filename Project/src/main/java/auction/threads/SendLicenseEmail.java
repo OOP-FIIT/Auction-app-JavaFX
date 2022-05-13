@@ -30,6 +30,10 @@ public class SendLicenseEmail extends Thread{
         this.login = login;
     } 
 
+    /**
+     * Sends email while App is switching to PRO and while License record in SQL is updating
+     */
+    @Override
     public void run(){
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", Const.MAIL.HOST);

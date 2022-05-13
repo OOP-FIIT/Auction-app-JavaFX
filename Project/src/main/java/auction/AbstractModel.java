@@ -6,9 +6,15 @@ import java.sql.SQLException;
 import auction.shared.Const;
 import auction.sql.SQL;
 
+/**
+ * Model of Auction that can be used to implement own Auction type
+ */
 public class AbstractModel {
     private static UserData currentUser;
 
+    /**
+     * Nested Class that will be used in Model to save User`s data in a Obbject
+     */
     public static class UserData {
         private int id;
         private String login;
@@ -116,7 +122,7 @@ public class AbstractModel {
     public static void updateUser(int newUserId) throws SQLException {
         setUSER(new UserData(newUserId));
     }
-    
+
     public static void setUSER(UserData uSER) {
         currentUser = uSER;
     }

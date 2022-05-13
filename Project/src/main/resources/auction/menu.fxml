@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="Menu_grid" onKeyPressed="#signOutHandle" prefHeight="735.0" prefWidth="884.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="Menu_grid" onKeyPressed="#signOutEscHandle" prefHeight="735.0" prefWidth="884.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="10.0" percentWidth="80.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.5999755859375" minWidth="10.0" percentWidth="20.0" prefWidth="82.0" />
@@ -28,11 +28,6 @@
             <VBox fx:id="Vbox_lots" alignment="CENTER" style="-fx-background-color: #8B008B;" />
          </content>
       </ScrollPane>
-      <TextField fx:id="add_lot_input" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#AddLot_handle" prefHeight="31.0" prefWidth="463.0" style="-fx-background-color: darkgreen;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
-         <GridPane.margin>
-            <Insets top="20.0" />
-         </GridPane.margin>
-      </TextField>
       <Text fx:id="add_lot_text" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Here you can add new lot" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets />
@@ -72,7 +67,7 @@
                   <RowConstraints maxHeight="304.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="buyPro_BUTTON" contentDisplay="CENTER" mnemonicParsing="false" onAction="#buyPro" prefHeight="80.0" prefWidth="154.0" style="-fx-background-color: DARKORCHID;" text="Buy Pro" textFill="#00ffbd" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="TOP">
+                  <Button fx:id="buyPro_BUTTON" contentDisplay="CENTER" mnemonicParsing="false" onAction="#buyProButtonHandle" prefHeight="80.0" prefWidth="154.0" style="-fx-background-color: DARKORCHID;" text="Buy Pro" textFill="#00ffbd" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="TOP">
                      <font>
                         <Font name="System Bold" size="30.0" />
                      </font>
@@ -105,7 +100,7 @@
                         <Font name="Arial Black" size="12.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#iHavePro" prefHeight="53.0" prefWidth="392.0" style="-fx-background-color: #00ffbd;" text="I already have PRO" textFill="DARKORCHID" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+                  <Button mnemonicParsing="false" onAction="#iHaveProButtonHandle" prefHeight="53.0" prefWidth="392.0" style="-fx-background-color: #00ffbd;" text="I already have PRO" textFill="DARKORCHID" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                      <font>
                         <Font name="Arial Black" size="14.0" />
                      </font>
@@ -119,7 +114,12 @@
             </GridPane>
          </children>
       </GridPane>
-      <TextField fx:id="add_bid_input" alignment="BOTTOM_CENTER" cache="true" depthTest="DISABLE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#addBid_handle" prefHeight="25.0" prefWidth="485.0" style="-fx-background-color: SLATEBLUE;" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+      <TextField fx:id="addLotInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#AddLot_handle" prefHeight="31.0" prefWidth="555.0" style="-fx-background-color: darkgreen;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+         <GridPane.margin>
+            <Insets top="20.0" />
+         </GridPane.margin>
+      </TextField>
+      <TextField fx:id="addBidInput" alignment="BOTTOM_CENTER" cache="true" depthTest="DISABLE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#addBidInputHandle" prefHeight="25.0" prefWidth="546.0" style="-fx-background-color: SLATEBLUE;" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
          <GridPane.margin>
             <Insets bottom="5.0" />
          </GridPane.margin>
@@ -129,7 +129,7 @@
             <Insets bottom="40.0" />
          </GridPane.margin>
       </Text>
-      <Button fx:id="end_lot_auction" mnemonicParsing="false" onAction="#endAuction" prefHeight="25.0" prefWidth="117.0" style="-fx-background-color: darkred;" text="End lot Auction" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <Button fx:id="endAuctionButton" mnemonicParsing="false" onAction="#endAuctionButtonHandle" prefHeight="25.0" prefWidth="117.0" style="-fx-background-color: darkred;" text="End lot Auction" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
       <Label text="Pro Tip: enter `ESC` to Sign Out" textFill="#464646" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
    </children>
 </GridPane>

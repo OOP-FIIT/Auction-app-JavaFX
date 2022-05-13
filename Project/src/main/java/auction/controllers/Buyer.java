@@ -3,27 +3,25 @@ package auction.controllers;
 import java.sql.SQLException;
 
 import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 
-public class Buyer extends User{
+/**
+ * Controller of BUYER mode
+ */
+public class Buyer extends User {
 
+    /**
+     * Disables feachures of [Adding Lot] and [Ending Auction]
+     * Adds "BuyPro" Banner
+     */
     @Override
     public void initialize() throws SQLException {
-        add_lot_input.setPromptText("Try PRO version to use this");
-        add_lot_input.setDisable(true);
-        end_lot_auction.setDisable(true);
-        Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
-        PrintLots();
-        Platform.runLater(add_bid_input::requestFocus);
-        UpdateUserData();
-        setProBanner();
+        super.initialize();
 
+        addLotInput.setPromptText("Try PRO version to use this");
+        addLotInput.setDisable(true);
+        endAuctionButton.setDisable(true);
+        Platform.runLater(addBidInput::requestFocus);
+        setProBanner();
     }
-    
 
 }

@@ -8,17 +8,23 @@ import java.sql.Statement;
 
 import auction.shared.Const;
 
+/**
+ * Database Handler that provides execution of SQL commands 
+ */
 public class SQL {
    private static Connection conn;
 
    // INIT--------------------------------------
-
+   /**
+    * Tries to connect to the MySQL database Server
+    * Creates database and table IF NOT EXISTS
+    */
    public static void initSql() throws SQLException {
       // Open a connection
       conn = DriverManager.getConnection(Const.SQL.DB_URL, Const.SQL.DB_LOGIN, Const.SQL.DB_PASS);
-      CreateDataBase(); //
+      createDataBase(); //
       selectDataBase(); // Auction
-      CreateTables();   // Users | Lots | Bids
+      createTables();   // Users | Lots | Bids
 
    }
 
@@ -28,7 +34,7 @@ public class SQL {
       stmt.executeUpdate(sql);
    }
 
-   public static boolean IsLoginExists(String login) throws SQLException {
+   public static boolean loginExists(String login) throws SQLException {
       Statement stmt = conn.createStatement();
       String sql =   " SELECT * FROM " + Const.SQL.USERDATA + 
                      " WHERE "         + Const.SQL.USERDATA_LOGIN + " = \"" + login + "\";";
@@ -57,13 +63,13 @@ public class SQL {
 
    //CREATE-------------------------------------   
 
-   private static void CreateDataBase() throws SQLException{
+   private static void createDataBase() throws SQLException{
       String create = "CREATE DATABASE IF NOT EXISTS " + Const.SQL.DB_NAME; 
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(create);
    }
    
-   private static void CreateTables() throws SQLException{
+   private static void createTables() throws SQLException{
       CreateTable_Users();
       CreateTable_Lots();
       CreateTable_Bids();
