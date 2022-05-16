@@ -1,0 +1,1 @@
+Best case of testing project - create new acc and try to add bids, lots and end auction. Also click on GETPRO button and try to sign in again to click "I already have PRO" and select json that was sended via email

@@ -28,5 +28,8 @@ Then my programm tries to connect to MySQL.localhost server with LOGIN and PASSW
 
 Please set here your actual mySQL LOGIN and PASS in roject/src/main/java/auction/shared/Const.java in #19 and #23
 
+
+Possible issue - exceptions if you tries to send some email (While registration, BUYPRO, if you win auction)
+This is possible because I use Gmail to send email, and Google sometimes blok sending via java.mail due to new devise signed in. But sometimes it works fine on new devises. 
 ## Database
 Open MySQL WorkBench and import dump.sql fwom Project/sqlDump

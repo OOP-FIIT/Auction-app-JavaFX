@@ -14,28 +14,16 @@
 
 ## Fulfillment of criteria
 
-Polymorphism +
-Aggregation +
-Gui +
-Verification wia mail +
+Describen in Documentation.pdf
 
 ## Certain implementations
 
-Note: Write here where you have used inheritance, polymorphism and aggregation, or anything else you want to brag about. Also, add in which version you made a certain implementation and within which file and line it is located.
+Describen in Documentation.pdf
 
 ### Main criteria
 
-Note: Write here your list with the name of the class and the line of code.
-
-Example:
-
-* polymorphism and aggregation
-  * Auctioner.java # 5
-  * Goods.java # 8
-* inheritance
-  * Buyer.java # 2
+Described in Documentation.pdf
 
 ### Secondary criteria
 
-Example:
-
+Described in Documentation.pdf
