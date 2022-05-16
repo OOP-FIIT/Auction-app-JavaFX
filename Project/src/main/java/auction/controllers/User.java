@@ -17,6 +17,8 @@ import auction.shared.Const;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -46,14 +48,29 @@ import javafx.stage.Stage;
  * Controller of PRO mode
  */
 public class User implements Handler {
+    /**
+     * The Scroll lots.
+     */
     @FXML
     protected ScrollPane scroll_lots;
+    /**
+     * The Vbox lots.
+     */
     @FXML
     protected VBox Vbox_lots;
+    /**
+     * The Add lot input.
+     */
     @FXML
     protected TextField addLotInput;
+    /**
+     * The Add bid input.
+     */
     @FXML
     protected TextField addBidInput;
+    /**
+     * The Add lot text.
+     */
     @FXML
     protected Text add_lot_text;
     @FXML
@@ -68,10 +85,19 @@ public class User implements Handler {
     private Label haveProLable;
     @FXML
     private GridPane Menu_grid;
+    /**
+     * The User info gridpane.
+     */
     @FXML
     protected GridPane userInfo_GRIDPANE;
+    /**
+     * The Pro banner grid.
+     */
     @FXML
     protected GridPane proBannerGrid;
+    /**
+     * The End auction button.
+     */
     @FXML
     protected Button endAuctionButton;
 
@@ -79,19 +105,48 @@ public class User implements Handler {
     private static final String CHECKED_LOT_BG_COLOR = "MEDIUMSPRINGGREEN";
 
     private boolean lotIsChecked = false;
-    private int lotCheckedID = -1;
+    int lotCheckedID = -1;
     private GridPane lotChecked;
 
     private int addLotStatus = 1;
     private String LOT_NAME = "";
     private String LOT_DESCRIPTION = "";
 
+
+    /**
+     * Initialize.
+     *
+     * @throws SQLException the sql exception
+     */
     public void initialize() throws SQLException {
         Vbox_lots.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         scroll_lots.setStyle("-fx-background: DARKSLATEGREY; -fx-border-color: #90EE90;");
         printLots();
         Platform.runLater(addLotInput::requestFocus);
         updateUserData();
+        class EndAuctionHandler implements EventHandler<ActionEvent> {
+            @Override
+            public void handle(ActionEvent event) {
+                if (lotCheckedID != -1) {
+                    try {
+                        Auction.endAuction(lotCheckedID);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    if (!Auction.isEndAuctionFirstClick()) {
+                        try {
+                            printLots();
+                            updateUserData();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            }
+        }
+        endAuctionButton.setOnAction(new EndAuctionHandler());
+
         addBidInput.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
@@ -104,7 +159,6 @@ public class User implements Handler {
 
     }
 
-        
     /**
      * Shows custom banner depends on user`s mode
      */
@@ -120,10 +174,11 @@ public class User implements Handler {
         proBannerGrid.setVisible(true);
 
     }
-    
+
     /**
-     * Prints every lot that is stored in DataBase 
-     * @throws SQLException
+     * Prints every lot that is stored in DataBase
+     *
+     * @throws SQLException the sql exception
      */
     protected void printLots() throws SQLException {
         Vbox_lots.getChildren().clear();
@@ -149,6 +204,7 @@ public class User implements Handler {
     /**
      * Saves name of Lot
      * and swithes to addLotDescription mode
+     * 
      * @param name
      * @throws ParseException
      */
@@ -165,7 +221,8 @@ public class User implements Handler {
     /**
      * Saves description
      * then push it in DataBase
-     * then updates Lot view 
+     * then updates Lot view
+     * 
      * @param input
      * @throws SQLException
      */
@@ -184,6 +241,7 @@ public class User implements Handler {
 
     /**
      * Returns FXML GridPane with all info in arguments
+     * 
      * @param name
      * @param date
      * @param description
@@ -204,16 +262,16 @@ public class User implements Handler {
 
         Lot_date.setStyle("-fx-text-fill: black; -fx-font-size: 14;");
         Lot_name.setStyle("-fx-text-fill: white; -fx-font-size: 16;");
-        Lot_description.setStyle("-fx-text-fill: green;  ");
+        Lot_description.setStyle("-fx-text-fill: darkgreen;  ");
         Lot_seller.setStyle("-fx-text-fill: red; -fx-font-size: 24;");
 
         GridPane Lot_template = new GridPane();
         Lot_template.setStyle("-fx-background-color: " + LOT_BG_COLOR + ";");
         Lot_template.setGridLinesVisible(true);
 
-        Lot_template.add(Lot_name, 0, 0);
+        Lot_template.add(Lot_name, 1, 0);
         Lot_template.add(Lot_date, 0, 2);
-        Lot_template.add(Lot_description, 1, 0);
+        Lot_template.add(Lot_description, 1, 1);
         Lot_template.add(Lot_seller, 0, 1);
         Lot_template.maxHeight(30);
 
@@ -267,7 +325,8 @@ public class User implements Handler {
 
     /**
      * Updates UserData with new frim SQL
-     * @throws SQLException
+     *
+     * @throws SQLException the sql exception
      */
     protected void updateUserData() throws SQLException {
         Auction.updateUser();
@@ -275,7 +334,16 @@ public class User implements Handler {
         user_login_text.setText(Auction.getUSER().getLogin());
     }
 
-    // Handlers-------------------------------
+
+    /**
+     * Add lot input handle.
+     *
+     * @param ke the ke
+     * @throws ParseException the parse exception
+     * @throws SQLException   the sql exception
+     * @throws IOException    the io exception
+     */
+// Handlers-------------------------------
 
     public void addLotInputHandle(KeyEvent ke) throws ParseException, SQLException, IOException {
         String input = "";
@@ -294,6 +362,15 @@ public class User implements Handler {
         }
     }
 
+
+    /**
+     * Add bid input handle.
+     *
+     * @param ke the ke
+     * @throws ParseException the parse exception
+     * @throws SQLException   the sql exception
+     * @throws IOException    the io exception
+     */
     public void addBidInputHandle(KeyEvent ke) throws ParseException, SQLException, IOException {
         if (ke.getCode().equals(KeyCode.ENTER) && lotCheckedID != -1) {
             boolean res = false;
@@ -316,26 +393,47 @@ public class User implements Handler {
         }
     }
 
-    public void endAuctionButtonHandle() throws SQLException {
-        if (lotCheckedID != -1) {
-            Auction.endAuction(lotCheckedID);
-            if (!Auction.isEndAuctionFirstClick()) {
-                printLots();
-                updateUserData();
-            }
 
-        }
+    /**
+     * End auction button handle.
+     *
+     * @throws SQLException the sql exception
+     */
+    public void endAuctionButtonHandle() throws SQLException {
+
     }
 
+
+    /**
+     * Sign out esc handle.
+     *
+     * @param ke the ke
+     * @throws IOException the io exception
+     */
     public void signOutEscHandle(KeyEvent ke) throws IOException {
-            // Default method inplementation
+        // Default method inplementation
         Handler.super.signOutHandle(ke);
     }
 
+
+    /**
+     * Buy pro button handle.
+     *
+     * @throws NoSuchAlgorithmException the no such algorithm exception
+     * @throws SQLException             the sql exception
+     * @throws IOException              the io exception
+     */
     public void buyProButtonHandle() throws NoSuchAlgorithmException, SQLException, IOException {
         Auction.setLicenseKey();
     }
 
+
+    /**
+     * Have pro button handle.
+     *
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
+     */
     public void iHaveProButtonHandle() throws SQLException, IOException {
         FileChooser fileChooser = new FileChooser();
         File licenseFile = fileChooser.showOpenDialog(new Stage());

@@ -2,9 +2,12 @@ package auction.controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.util.Random;
 
+import auction.App;
+import auction.Auction;
+import auction.dataBase.SQL;
+import auction.shared.Const;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -12,13 +15,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javax.mail.*;
-import javax.mail.internet.*;
-
-import auction.App;
-import auction.Auction;
-import auction.dataBase.SQL;
-import auction.shared.Const;
 
 /**
  * Controller of Sign in/on window
@@ -50,6 +46,9 @@ public class Authentication implements Handler {
     private String userEmailFinal;
     private int randomBalance = 100;
 
+    /**
+     * Initialize.
+     */
     public void initialize() {
         Platform.runLater(loginInput::requestFocus);
     }
@@ -199,11 +198,12 @@ public class Authentication implements Handler {
 
     // HANDLERS
     // ---------------------------------------------------------------------------------------
+
     /**
      * Creates new user in DataBase and swithes to BUYER mode
-     * 
-     * @throws SQLException
-     * @throws IOException
+     *
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
      */
     public void buyerModeButtonHandle() throws SQLException, IOException {
         int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_BUYER,
@@ -213,9 +213,9 @@ public class Authentication implements Handler {
 
     /**
      * Creates new user in DataBase and swithes to SELLER mode
-     * 
-     * @throws SQLException
-     * @throws IOException
+     *
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
      */
     public void sellerModeButtonHandle() throws SQLException, IOException {
         int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_SELLER,
@@ -225,9 +225,9 @@ public class Authentication implements Handler {
 
     /**
      * Creates new user in DataBase and swithes to AUCTIONER mode
-     * 
-     * @throws SQLException
-     * @throws IOException
+     *
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
      */
     public void auctionerModeButtonHandle() throws SQLException, IOException {
         int userID = SQL.InsertUser(userLoginFinal, userPasswordFinal, userEmailFinal, Const.SQL.USER_MODE_AUCTIONER,
@@ -237,10 +237,10 @@ public class Authentication implements Handler {
 
     /**
      * Starts checkLogin() if ENTER pressed in login input
-     * 
-     * @param ke
-     * @throws SQLException
-     * @throws IOException
+     *
+     * @param ke the ke
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
      */
     public void loginInputHandle(KeyEvent ke) throws SQLException, IOException {
         if (ke.getCode().equals(KeyCode.ENTER)) {
@@ -251,10 +251,10 @@ public class Authentication implements Handler {
 
     /**
      * Starts checkPassword() if ENTER pressed in password input
-     * 
-     * @param ke
-     * @throws SQLException
-     * @throws IOException
+     *
+     * @param ke the ke
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
      */
     public void passwordInputHandle(KeyEvent ke) throws SQLException, IOException {
         if (ke.getCode().equals(KeyCode.ENTER)) {
@@ -266,8 +266,8 @@ public class Authentication implements Handler {
 
     /**
      * Starts checkEmail() if ENTER pressed on email input
-     * 
-     * @param ke
+     *
+     * @param ke the ke
      */
     public void emailInputHande(KeyEvent ke) {
         if (ke.getCode().equals(KeyCode.ENTER)) {
@@ -276,6 +276,13 @@ public class Authentication implements Handler {
         }
     }
 
+
+    /**
+     * Sign out esc handle.
+     *
+     * @param ke the ke
+     * @throws IOException the io exception
+     */
     public void signOutEscHandle(KeyEvent ke) throws IOException {
         // Default method inplementation
         Handler.super.signOutHandle(ke);

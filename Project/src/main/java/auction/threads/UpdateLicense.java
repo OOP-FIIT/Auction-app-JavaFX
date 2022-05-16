@@ -4,10 +4,19 @@ import java.sql.SQLException;
 
 import auction.dataBase.SQL;
 
+/**
+ * The type Update license.
+ */
 public class UpdateLicense extends Thread{
     private String licenseKey;
     private int id;
 
+    /**
+     * Instantiates a new Update license.
+     *
+     * @param licenseKey the license key
+     * @param id         the id
+     */
     public UpdateLicense(String licenseKey, int id){
         this.licenseKey = licenseKey;
         this.id = id;

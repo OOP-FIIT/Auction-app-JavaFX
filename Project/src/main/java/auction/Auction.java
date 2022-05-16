@@ -34,12 +34,29 @@ import auction.shared.Const;
 import auction.threads.SendLicenseEmail;
 import auction.threads.UpdateLicense;
 
+/**
+ * The type Auction.
+ */
 public class Auction extends AbstractModel{
     private static int userId = 0;
     private static UserData currentUser;
     private static boolean endAuctionFirstClick = false;
 
+    /**
+     * The Message.
+     */
     static License message;
+
+
+    /**
+     * Try add bid boolean.
+     *
+     * @param bidStr the bid str
+     * @param lotId  the lot id
+     * @return boolean boolean
+     * @throws SQLException the sql exception
+     * @throws BidException the bid exception
+     */
     public static boolean tryAddBid(String bidStr, int lotId) throws SQLException, BidException {
         if (bidStr.equals("")) {
             throw new BidException("You cannot add [EMPTY] bid");
@@ -63,12 +80,20 @@ public class Auction extends AbstractModel{
         // check if balance is enough to make a bid
     }
 
+
+    /**
+     * End auction.
+     *
+     * @param lotId the lot id
+     * @throws SQLException the sql exception
+     */
     public static void endAuction(int lotId) throws SQLException {
         // SQL get all bids
         int winningBid;
         int bid;
         int buyerId;
         ResultSet res = SQL.SELECT_Bids(lotId);
+        int sellerId = SQL.SELECT_SellerIdByLotId(lotId);
 
         // Return bid to first buyer
         if (!res.next()) {
@@ -94,26 +119,36 @@ public class Auction extends AbstractModel{
         // If only 1 bid - then it wins
         if (!res.next()) {
             System.out.println("You finished Auction with only 1 bid");
-            int sellerId = SQL.SELECT_SellerIdByLotId(lotId);
             // Set 1 bid as winner
-            SQL.UPDATE_User(null, null, null, null, -winningBid, true, bid);
+            SQL.UPDATE_User(null, null, null, null, -winningBid, true, buyerId);
             // Give money to seller
             SQL.UPDATE_User(null, null, null, null, winningBid, true, sellerId);
             SQL.DELETE_Lot(lotId);
             SQL.DELETE_Bids(lotId);
+            
+            ResultSet winnerUser = SQL.SELECT_UserData(buyerId);
+            winnerUser.next();
+            ResultSet sellerUser = SQL.SELECT_UserData(sellerId);
+            sellerUser.next();
 
+            sendWinEmail(winnerUser.getString(Const.SQL.USERDATA_EMAIL), String.valueOf(lotId), sellerUser.getString(Const.SQL.USERDATA_LOGIN));
             setEndAuctionFirstClick(false);
             return;
 
         }
 
         winningBid = res.getInt(Const.SQL.BIDS_BID);
-        SQL.UPDATE_User(null, null, null, null, 0, true, res.getInt("buyer_id"));
+        ResultSet winnerUser = SQL.SELECT_UserData(res.getInt("buyer_id"));
+        winnerUser.next();
+        ResultSet sellerUser = SQL.SELECT_UserData(sellerId);
+        sellerUser.next();
+
+        sendWinEmail(winnerUser.getString(Const.SQL.USERDATA_EMAIL), String.valueOf(lotId), sellerUser.getString(Const.SQL.USERDATA_LOGIN));
+        setEndAuctionFirstClick(false);
 
         while (res.next()) {
             SQL.UPDATE_User(null, null, null, null, res.getInt("bid"), true, res.getInt("buyer_id"));
         }
-        int sellerId = SQL.SELECT_SellerIdByLotId(lotId);
         SQL.UPDATE_User(null, null, null, null, winningBid, true, sellerId);
         SQL.DELETE_Lot(lotId);
         SQL.DELETE_Bids(lotId);
@@ -127,20 +162,36 @@ public class Auction extends AbstractModel{
     }
 
     /**
+     * Gets user.
+     *
      * @return the uSER
      */
     public static UserData getUSER() {
         return currentUser;
     }
 
+    /**
+     * Update user.
+     *
+     * @throws SQLException the sql exception
+     */
     public static void updateUser() throws SQLException {
         setUSER(new UserData(userId));
     }
 
+
+    /**
+     * Sets user.
+     *
+     * @param uSER the u ser
+     */
     public static void setUSER(UserData uSER) {
         currentUser = uSER;
     }
+
     /**
+     * Gets user id.
+     *
      * @return the uSER_ID
      */
     public static int getUserId() {
@@ -148,13 +199,17 @@ public class Auction extends AbstractModel{
     }
 
     /**
-     * @param userId the uSER_ID to set
+     * Sets user id.
+     *
+     * @param newUserId the new user id
      */
     public static void setUserId(int newUserId) {
         userId = newUserId;
     }
 
     /**
+     * Is end auction first click boolean.
+     *
      * @return the endAuctionFirstClick
      */
     public static boolean isEndAuctionFirstClick() {
@@ -162,7 +217,9 @@ public class Auction extends AbstractModel{
     }
 
     /**
-     * @param endAuctionFirstClick the endAuctionFirstClick to set
+     * Sets end auction first click.
+     *
+     * @param state the state
      */
     public static void setEndAuctionFirstClick(boolean state) {
         endAuctionFirstClick = state;
@@ -172,9 +229,10 @@ public class Auction extends AbstractModel{
      * Creates LicenseKey
      * Updates DataBase
      * Switches window to PRO mode
-     * @throws NoSuchAlgorithmException
-     * @throws SQLException
-     * @throws IOException
+     *
+     * @throws NoSuchAlgorithmException the no such algorithm exception
+     * @throws SQLException             the sql exception
+     * @throws IOException              the io exception
      */
     public static void setLicenseKey() throws NoSuchAlgorithmException, SQLException, IOException {
         String licenseKey = generateLicenseKey();
@@ -233,10 +291,11 @@ public class Auction extends AbstractModel{
 
     /**
      * Return TRUE if license is correct and FALSE if it differs from DataBase`s license
-     * @param file
-     * @return
-     * @throws SQLException
-     * @throws IOException
+     *
+     * @param file the file
+     * @return boolean boolean
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
      */
     public static boolean verifyLicense(File file) throws SQLException, IOException {
         updateUser();
@@ -272,7 +331,9 @@ public class Auction extends AbstractModel{
 
     /**
      * Sends email to new PRO version owner with licenseKey.JSON file
-     * @param reciever
+     *
+     * @param reciever the reciever
+     * @return the int
      */
     public static int sendActivationMail(String reciever) {
         int activationCode = -1;
@@ -315,4 +376,49 @@ public class Auction extends AbstractModel{
         }
         return activationCode;
     }
+
+    /**
+     * Sends Email about winnind in Auction
+     * @param reciever
+     * @param lotName
+     * @param sellerName
+     */
+    public static void sendWinEmail(String reciever, String lotName, String sellerName){
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", Const.MAIL.HOST);
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(Const.MAIL.LOGIN, Const.MAIL.PASSWORD);
+            }
+        });
+
+        session.setDebug(false);
+
+        try {
+            // Create a default MimeMessage object.
+            MimeMessage message = new MimeMessage(session);
+
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(Const.MAIL.LOGIN));
+
+            // Set To: header field of the header.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
+            // Set Subject: header field
+            message.setSubject("You won in auction...");
+
+            message.setText(Const.MAIL.getWinMessage(lotName, sellerName));
+
+            // Send message
+            Transport.send(message);
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    } 
+
 }

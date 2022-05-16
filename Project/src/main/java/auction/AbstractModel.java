@@ -23,6 +23,12 @@ public class AbstractModel {
         private String mode;
         private String license;
 
+        /**
+         * Instantiates a new User data.
+         *
+         * @param userId the user id
+         * @throws SQLException the sql exception
+         */
         public UserData(int userId) throws SQLException {
             ResultSet res = SQL.SELECT_UserData(userId);
             res.next();
@@ -35,6 +41,8 @@ public class AbstractModel {
         }
 
         /**
+         * Gets id.
+         *
          * @return the id
          */
         public int getId() {
@@ -44,11 +52,13 @@ public class AbstractModel {
         /**
          * @param id the id to set
          */
-        public void setId(int id) {
+        private void setId(int id) {
             this.id = id;
         }
 
         /**
+         * Gets login.
+         *
          * @return the login
          */
         public String getLogin() {
@@ -58,11 +68,13 @@ public class AbstractModel {
         /**
          * @param login the login to set
          */
-        public void setLogin(String login) {
+        private void setLogin(String login) {
             this.login = login;
         }
 
         /**
+         * Gets email.
+         *
          * @return the email
          */
         public String getEmail() {
@@ -72,11 +84,13 @@ public class AbstractModel {
         /**
          * @param email the email to set
          */
-        public void setEmail(String email) {
+        private void setEmail(String email) {
             this.email = email;
         }
 
         /**
+         * Gets balance.
+         *
          * @return the balance
          */
         public int getBalance() {
@@ -86,11 +100,13 @@ public class AbstractModel {
         /**
          * @param balance the balance to set
          */
-        public void setBalance(int balance) {
+        private void setBalance(int balance) {
             this.balance = balance;
         }
 
         /**
+         * Gets mode.
+         *
          * @return the mode
          */
         public String getMode() {
@@ -100,11 +116,13 @@ public class AbstractModel {
         /**
          * @param mode the mode to set
          */
-        public void setMode(String mode) {
+        private void setMode(String mode) {
             this.mode = mode;
         }
 
         /**
+         * Gets license.
+         *
          * @return the license
          */
         public String getLicense() {
@@ -114,15 +132,28 @@ public class AbstractModel {
         /**
          * @param license the license to set
          */
-        public void setLicense(String license) {
+        private void setLicense(String license) {
             this.license = license;
         }
     }
 
+
+    /**
+     * Update user.
+     *
+     * @param newUserId the new user id
+     * @throws SQLException the sql exception
+     */
     public static void updateUser(int newUserId) throws SQLException {
         setUSER(new UserData(newUserId));
     }
 
+
+    /**
+     * Sets user.
+     *
+     * @param uSER the u ser
+     */
     public static void setUSER(UserData uSER) {
         currentUser = uSER;
     }

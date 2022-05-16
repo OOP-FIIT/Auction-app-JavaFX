@@ -20,6 +20,7 @@ public class Buyer extends User {
         addLotInput.setPromptText("Try PRO version to use this");
         addLotInput.setDisable(true);
         endAuctionButton.setDisable(true);
+        
         Platform.runLater(addBidInput::requestFocus);
         setProBanner();
     }

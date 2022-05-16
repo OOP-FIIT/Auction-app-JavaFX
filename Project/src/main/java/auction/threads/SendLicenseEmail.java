@@ -19,11 +19,21 @@ import org.json.simple.JSONObject;
 
 import auction.shared.Const;
 
+/**
+ * The type Send license email.
+ */
 public class SendLicenseEmail extends Thread{
     private String licenseKey;
     private String email;
     private String login;
 
+    /**
+     * Instantiates a new Send license email.
+     *
+     * @param license the license
+     * @param email   the email
+     * @param login   the login
+     */
     public SendLicenseEmail(String license, String email, String login){
         this.licenseKey = license; 
         this.email = email;

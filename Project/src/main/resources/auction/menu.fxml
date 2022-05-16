@@ -129,7 +129,7 @@
             <Insets bottom="40.0" />
          </GridPane.margin>
       </Text>
-      <Button fx:id="endAuctionButton" mnemonicParsing="false" onAction="#endAuctionButtonHandle" prefHeight="25.0" prefWidth="117.0" style="-fx-background-color: darkred;" text="End lot Auction" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <Button fx:id="endAuctionButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" style="-fx-background-color: darkred;" text="End lot Auction" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
       <Label text="Pro Tip: enter `ESC` to Sign Out" textFill="#464646" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
    </children>
 </GridPane>
