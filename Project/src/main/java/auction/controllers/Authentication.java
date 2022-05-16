@@ -83,11 +83,13 @@ public class Authentication implements Handler {
     private void checkPassword(String login, String password) throws SQLException, IOException {
         if (signInMode) {
             int userID = SQL.IsPaaswordCorrect(login, password);
-            Auction.setUserId(userID);
-            Auction.updateUser();
-            String mode = Auction.getUSER().getMode();
-            if (userID != 0)
+
+            if (userID != 0){
+                Auction.setUserId(userID);
+                Auction.updateUser();
+                String mode = Auction.getUSER().getMode();
                 switchToMenu(mode, userID);
+            }
             else {
                 passwordInput.setText("");
                 passwordText.setText("Please, try again");

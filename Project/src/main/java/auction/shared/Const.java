@@ -190,8 +190,7 @@ public final class Const {
         public static final String getWinMessage(String lotName, String sellerName){
            return "Congratulations!"                     + " \n" + 
                   "You have won in auction (seller: "+ sellerName + ")"               + " \n" + 
-                  "Your new item: " + lotName  + " \n\n" + 
-                  "Knock, Knock, Neo.";
+                  "Your new item: " + lotName  ;
         }
         
 
