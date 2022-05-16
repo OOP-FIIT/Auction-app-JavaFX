@@ -12,10 +12,21 @@ Example:
 * MySQL Connector/J 8.0.23
 
 ## Installation
+Maven is needed, if it installed then dependencies wiil be download through maven 
 
-Make sure MySQL is installed properly and running at port 3306 with username 'root' and password 'misha'
+Make sure MySQL is installed properly and running at port 3306
+To make project compile you should set your LOGIN and PASSWORN inside MySQL
+For example I have login: "root" and password: "misha"
+
+Then my programm tries to connect to MySQL.localhost server with LOGIN and PASSWORD that is described in Project/src/main/java/auction/shared/Const.java in #19 and #23         
+        public static final String DB_LOGIN = "root";
+        /**
+         * The constant DB_PASS.
+         */
+        public static final String DB_PASS = "misha";
+        /**
+
+Please set here your actual mySQL LOGIN and PASS in roject/src/main/java/auction/shared/Const.java in #19 and #23
 
 ## Database
-
-SQL_manager.java creates DB and tables by itsown
-No problems expected
+Open MySQL WorkBench and import dump.sql fwom Project/sqlDump
