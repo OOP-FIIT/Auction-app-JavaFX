@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"auction","l":"auction"},{"m":"auction","l":"auction.controllers"},{"m":"auction","l":"auction.dataBase"},{"m":"auction","l":"auction.exception"},{"m":"auction","l":"auction.interfaces"},{"m":"auction","l":"auction.shared"},{"m":"auction","l":"auction.threads"}];updateSearchResults();
