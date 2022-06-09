@@ -8,7 +8,7 @@ public final class Const {
     /**
      * The type Sql.
      */
-    public static final class SQL{
+    public static final class SQL {
         /**
          * The constant DB_URL.
          */
@@ -16,11 +16,11 @@ public final class Const {
         /**
          * The constant DB_LOGIN.
          */
-        public static final String DB_LOGIN = "root";
+        public static final String DB_LOGIN = "ENTER YOUR MySQL LOGIN";
         /**
          * The constant DB_PASS.
          */
-        public static final String DB_PASS = "misha";
+        public static final String DB_PASS = "ENTER YOUR MySQL PASSWORD";
         /**
          * The constant DB_NAME.
          */
@@ -59,7 +59,6 @@ public final class Const {
          */
         public static final String USERDATA_LICENSE = "license";
 
-
         /**
          * The constant LOTS.
          */
@@ -84,7 +83,6 @@ public final class Const {
          * The constant LOTS_DESCRIPTION.
          */
         public static final String LOTS_DESCRIPTION = "description";
-
 
         /**
          * The constant BIDS.
@@ -129,11 +127,10 @@ public final class Const {
         public static final String USER_MODE_PRO = "Pro";
     }
 
-
     /**
      * The type Fxml.
      */
-    public static final class FXML{
+    public static final class FXML {
         /**
          * The constant LOGIN_SCENE.
          */
@@ -151,24 +148,23 @@ public final class Const {
          * The constant PRO_TIPS.
          */
         protected static final String[] PRO_TIPS = {
-            "DoubleClick on (End Auction) deletes Lot even if there was no bids" ,
+                "DoubleClick on (End Auction) deletes Lot even if there was no bids",
         };
-
 
     }
 
     /**
      * The type Mail.
      */
-    public static final class MAIL{
+    public static final class MAIL {
         /**
          * The constant LOGIN.
          */
-        public static final String LOGIN = "sichkaruk.company@gmail.com";
+        public static final String LOGIN = "ENTER YOUR GMAIL LOGIN";
         /**
          * The constant PASSWORD.
          */
-        public static final String PASSWORD = "Company_2001";
+        public static final String PASSWORD = "ENTER YOUR GMAIL PASSWORD";
         /**
          * The constant HOST.
          */
@@ -180,19 +176,18 @@ public final class Const {
          * @param activationCode the activation code
          * @return the string
          */
-        public static final String getCodeMessage(int activationCode){
-           return "Wake up, Neo..."                     + " \n" + 
-                  "The Matrix has you..."               + " \n" + 
-                  "Follow the code: " + activationCode  + " \n\n" + 
-                  "Knock, Knock, Neo.";
+        public static final String getCodeMessage(int activationCode) {
+            return "Wake up, Neo..." + " \n" +
+                    "The Matrix has you..." + " \n" +
+                    "Follow the code: " + activationCode + " \n\n" +
+                    "Knock, Knock, Neo.";
         }
 
-        public static final String getWinMessage(String lotName, String sellerName){
-           return "Congratulations!"                     + " \n" + 
-                  "You have won in auction (seller: "+ sellerName + ")"               + " \n" + 
-                  "Your new item: " + lotName  ;
+        public static final String getWinMessage(String lotName, String sellerName) {
+            return "Congratulations!" + " \n" +
+                    "You have won in auction (seller: " + sellerName + ")" + " \n" +
+                    "Your new item: " + lotName;
         }
-        
 
     }
 
